@@ -6,8 +6,9 @@ import com.techdroidcentre.todo.mapper.toDomainModel
 import com.techdroidcentre.todo.mapper.toEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class TasksRepositoryImpl(
+class TasksRepositoryImpl @Inject constructor(
     private val taskDao: TaskDao
 ): TasksRepository {
     override fun getTasks(toDoListId: Long): Flow<List<Task>> {
