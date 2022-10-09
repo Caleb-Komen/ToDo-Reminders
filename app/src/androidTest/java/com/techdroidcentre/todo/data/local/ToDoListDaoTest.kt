@@ -2,6 +2,7 @@ package com.techdroidcentre.todo.data.local
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth
+import com.techdroidcentre.todo.data.BaseTest
 import com.techdroidcentre.todo.data.local.entities.ToDoListEntity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
