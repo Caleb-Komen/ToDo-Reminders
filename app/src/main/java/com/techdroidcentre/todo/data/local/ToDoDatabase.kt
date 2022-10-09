@@ -7,6 +7,7 @@ import com.techdroidcentre.todo.data.local.entities.TaskEntity
 import com.techdroidcentre.todo.data.local.entities.ToDoListEntity
 
 @Database(entities = [TaskEntity::class, ToDoListEntity::class], version = 1)
+@TypeConverters(Converter::class)
 abstract class ToDoDatabase: RoomDatabase() {
     abstract val taskDao: TaskDao
     abstract val toDoListDao: ToDoListDao
