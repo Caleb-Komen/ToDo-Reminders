@@ -30,15 +30,8 @@ class ToDoListDaoTest: BaseTest() {
 
     @Test
     fun getAllToDoList() = runTest{
-        val toDos = toDoListDao.getAllToDoList().first()
+        val toDos = toDoListDao.getAllToDoList().first().map { it.toDoListEntity }
         Truth.assertThat(toDos).containsAnyIn(Data.toDos)
-    }
-
-    @Test
-    fun getToDoListWithId() = runTest {
-        val todo = Data.toDos[1]
-        val result = toDoListDao.getToDoList(todo.id).first()
-        Truth.assertThat(result.toDoListEntity).isEqualTo(todo)
     }
 
     @Test
@@ -51,18 +44,21 @@ class ToDoListDaoTest: BaseTest() {
 
         toDoListDao.addToDoList(todoList)
 
-        val toDos = toDoListDao.getAllToDoList().first()
+        val toDos = toDoListDao.getAllToDoList().first().map { it.toDoListEntity }
         Truth.assertThat(toDos).contains(todoList)
     }
 
     @Test
-    fun deleteToDoList_toDoListRemovedFromDb() = runTest {
-        var todos = toDoListDao.getAllToDoList().first()
+    fun deleteToDoList_toDoListAndTasksRemovedFromDb() = runTest {
+        val taskDao = database.taskDao
+        var todos = toDoListDao.getAllToDoList().first().map { it.toDoListEntity }
         val todoToDelete = todos[0]
 
         toDoListDao.deleteToDoList(todoToDelete.id)
 
-        todos = toDoListDao.getAllToDoList().first()
+        todos = toDoListDao.getAllToDoList().first().map { it.toDoListEntity }
+        val tasks = taskDao.getTasks(todoToDelete.id).first()
         Truth.assertThat(todos).doesNotContain(todoToDelete)
+        Truth.assertThat(tasks).isEmpty()
     }
 }

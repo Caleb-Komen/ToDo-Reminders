@@ -2,10 +2,22 @@ package com.techdroidcentre.todo.data.local.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.ForeignKey.CASCADE
 import androidx.room.PrimaryKey
 import com.techdroidcentre.todo.data.util.Priority
 
-@Entity(tableName = "tasks")
+@Entity(
+    tableName = "tasks",
+    foreignKeys = [
+        ForeignKey(
+            entity = ToDoListEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["todo_list_id"],
+            onDelete = CASCADE
+        )
+    ]
+)
 data class TaskEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long,

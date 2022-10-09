@@ -30,13 +30,15 @@ class TaskDaoTest: BaseTest() {
     }
 
     @Test
-    fun getAllTasks_confirmTasksAvailable() = runTest {
-        val tasks = taskDao.getTasks().first()
-        Truth.assertThat(tasks).containsAnyIn(Data.tasks)
+    fun getAllTasksWithToDoListId_confirmTasksAvailable() = runTest {
+        val todo = Data.toDos[0]
+        val tasks = taskDao.getTasks(todo.id).first()
+        Truth.assertThat(Data.tasks).containsAnyIn(tasks)
     }
 
     @Test
     fun addTaskAndGetAllTasks_newTaskAddedToDb() = runTest {
+        val todo = Data.toDos[0]
         val task = TaskEntity(
             15,
             "Theming in compose",
@@ -46,18 +48,19 @@ class TaskDaoTest: BaseTest() {
             1L
         )
         taskDao.addTask(task)
-        val tasks = taskDao.getTasks().first()
+        val tasks = taskDao.getTasks(todo.id).first()
         Truth.assertThat(tasks).contains(task)
     }
 
     @Test
     fun deleteTask_taskRemovedFromDb() = runTest {
-        var tasks = taskDao.getTasks().first()
+        val todo = Data.toDos[0]
+        var tasks = taskDao.getTasks(todo.id).first()
         val taskToDelete = tasks[0]
 
         taskDao.deleteTask(taskToDelete.id)
 
-        tasks = taskDao.getTasks().first()
+        tasks = taskDao.getTasks(todo.id).first()
         Truth.assertThat(tasks).doesNotContain(taskToDelete)
     }
 }

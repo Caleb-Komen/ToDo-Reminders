@@ -8,10 +8,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ToDoListDao {
     @Query("SELECT * FROM todo_list")
-    fun getAllToDoList(): Flow<List<ToDoListEntity>>
-
-    @Query("SELECT * FROM todo_list WHERE id = :id")
-    fun getToDoList(id: Long): Flow<ToDoListWithTasksEntity>
+    fun getAllToDoList(): Flow<List<ToDoListWithTasksEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addToDoList(toDoList: ToDoListEntity)
