@@ -13,10 +13,9 @@ open class BaseTest {
     @Before
     fun createDb() {
         val context = ApplicationProvider.getApplicationContext<Context>()
-        database = Room.databaseBuilder(
+        database = Room.inMemoryDatabaseBuilder(
             context,
-            ToDoDatabase::class.java,
-            "todo_db"
+            ToDoDatabase::class.java
         ).build()
     }
 
