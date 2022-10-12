@@ -9,12 +9,26 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+
+@Composable
+fun ToDoListItemScreen(
+    modifier: Modifier = Modifier,
+    viewModel: ToDoListViewModel = viewModel()
+) {
+    val toDoListViewState by viewModel.toDoListViewState
+    ToDoListItemScreen(
+        viewState = toDoListViewState,
+        modifier = modifier
+    )
+}
 
 @Composable
 fun ToDoListItemScreen(
