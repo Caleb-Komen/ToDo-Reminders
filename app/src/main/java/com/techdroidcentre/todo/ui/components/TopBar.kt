@@ -8,20 +8,24 @@ import androidx.compose.ui.tooling.preview.Preview
 
 @ExperimentalMaterial3Api
 @Composable
-fun TopBar() {
+fun TopBar(
+    showNewToDoListDialog: () -> Unit
+) {
     TopAppBar(
         title = {
             Text(text = "ToDo")
         },
         actions = {
-            ActionNewToDoList()
+            ActionNewToDoList(showNewToDoListDialog = showNewToDoListDialog)
         }
     )
 }
 
 @Composable
-fun ActionNewToDoList() {
-    IconButton(onClick = {  }) {
+fun ActionNewToDoList(
+    showNewToDoListDialog: () -> Unit
+) {
+    IconButton(onClick = { showNewToDoListDialog() }) {
         Icon(
             imageVector = Icons.Default.Add,
             contentDescription = "Add new ToDo list"
@@ -33,5 +37,5 @@ fun ActionNewToDoList() {
 @Preview
 @Composable
 fun TopBarPreview() {
-    TopBar()
+    TopBar(showNewToDoListDialog = {})
 }

@@ -4,6 +4,8 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.techdroidcentre.todo.data.model.ToDoList
+import com.techdroidcentre.todo.domain.usecases.AddToDoListUseCase
 import com.techdroidcentre.todo.domain.usecases.GetAllToDoListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -11,7 +13,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ToDoListViewModel @Inject constructor(
-    private val getAllToDoListUseCase: GetAllToDoListUseCase
+    private val getAllToDoListUseCase: GetAllToDoListUseCase,
+    private val addToDoListUseCase: AddToDoListUseCase
 ): ViewModel() {
     private val _toDoListViewState = mutableStateOf(ToDoListViewState())
     val toDoListViewState: State<ToDoListViewState> = _toDoListViewState
@@ -31,6 +34,12 @@ class ToDoListViewModel @Inject constructor(
                     isLoading = false
                 )
             }
+        }
+    }
+
+    fun addToDoList(todoList: ToDoList) {
+        viewModelScope.launch {
+            addToDoListUseCase(todoList)
         }
     }
 }
