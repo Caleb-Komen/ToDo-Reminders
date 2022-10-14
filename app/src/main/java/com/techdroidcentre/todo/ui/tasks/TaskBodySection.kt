@@ -30,6 +30,7 @@ fun TaskBodySection(
     dropDownExpanded: Boolean,
     onDismissRequest: () -> Unit,
     onDropDownMenuClick: () -> Unit,
+    onDropDownMenuItemSelected: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
@@ -42,9 +43,10 @@ fun TaskBodySection(
                 priority = priority,
                 dropDownExpanded = dropDownExpanded,
                 onDismissRequest = onDismissRequest,
-                onDropDownMenuClick = onDropDownMenuClick
+                onDropDownMenuClick = onDropDownMenuClick,
+                onDropDownMenuItemSelected = onDropDownMenuItemSelected
             )
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(8.dp))
             DateAndTime(date = date)
         }
         Spacer(modifier = Modifier.height(8.dp))
@@ -102,6 +104,7 @@ fun PriorityDropDownMenu(
     dropDownExpanded: Boolean,
     onDismissRequest: () -> Unit,
     onDropDownMenuClick: () -> Unit,
+    onDropDownMenuItemSelected: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -135,7 +138,7 @@ fun PriorityDropDownMenu(
                     priorities.forEach {
                         DropdownMenuItem(
                             text = { Text(text = it) },
-                            onClick = { /*TODO*/ }
+                            onClick = { onDropDownMenuItemSelected(it) }
                         )
                     }
                 }
@@ -154,7 +157,7 @@ fun DateAndTime(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = Modifier.padding(8.dp),
+        modifier = modifier.padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(text = "Due Date:")
@@ -179,6 +182,17 @@ val priorities = arrayOf("High", "Medium", "Low", "None")
 @Composable
 fun TaskBodySectionPreview() {
     ToDoTheme {
-        TaskBodySection("Task content", {}, false, {}, "None", "14:00", false, {}, {})
+        TaskBodySection(
+            "Task content",
+            {},
+            false,
+            {},
+            "None",
+            "01/01/2022",
+            false,
+            {},
+            {},
+            {}
+        )
     }
 }

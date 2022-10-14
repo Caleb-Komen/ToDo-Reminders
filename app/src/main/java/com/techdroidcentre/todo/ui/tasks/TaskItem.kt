@@ -8,12 +8,65 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ShapeDefaults
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.techdroidcentre.todo.data.model.Task
+import com.techdroidcentre.todo.data.util.Priority
 import com.techdroidcentre.todo.ui.theme.ToDoTheme
+import com.techdroidcentre.todo.ui.util.Util
+
+@ExperimentalMaterial3Api
+@Composable
+fun TaskItem(
+    task: TaskState,
+    saveTask: (task:Task) -> Unit
+) {
+    val originalTitle = task.title
+    val originalContent = task.content
+    val originalPriority = task.priority.name
+    val originalDueDate = task.dueDate
+
+    var title by remember { mutableStateOf(task.title) }
+    var content by remember { mutableStateOf(task.content) }
+    var priority by remember { mutableStateOf(task.priority.name) }
+    var dueDate by remember { mutableStateOf(task.dueDate) }
+    var isTitleFocused by remember { mutableStateOf(false) }
+    var isContentFocused by remember { mutableStateOf(false) }
+    var taskExpanded by remember { mutableStateOf(false) }
+    var dropDownExpanded by remember { mutableStateOf(false) }
+
+    if ((!isTitleFocused && originalTitle != title)
+        || (!isContentFocused && originalContent != content)
+        || originalPriority != priority
+        || originalDueDate != dueDate) {
+
+        saveTask(Task(task.id, title, content, dueDate, Priority.valueOf(priority)))
+    }
+
+    TaskItem(
+        title = title,
+        content = content,
+        onTitleChange = { title = it },
+        onContentChange = { content = it},
+        checked = false, // TODO: Work on this
+        onCheckedChange = {}, // TODO: Work on this
+        isTitleFocused = isTitleFocused,
+        isContentFocused = isContentFocused,
+        onTitleFocusChanged = { isTitleFocused = it.isFocused },
+        onContentFocusChanged = { isContentFocused = it.isFocused },
+        taskExpanded = taskExpanded,
+        onExpandTask = { taskExpanded = !taskExpanded},
+        dropDownExpanded = dropDownExpanded,
+        priority = task.priority.name,
+        date = Util.toDateString(task.dueDate),
+        onDismissRequest = { dropDownExpanded = false },
+        onDropDownMenuClick = { dropDownExpanded = true },
+        onDropDownMenuItemSelected = { priority = it}
+    )
+}
 
 @ExperimentalMaterial3Api
 @Composable
@@ -29,11 +82,13 @@ fun TaskItem(
     onTitleFocusChanged: (FocusState) -> Unit,
     onContentFocusChanged: (FocusState) -> Unit,
     taskExpanded: Boolean,
+    onExpandTask: () -> Unit,
     dropDownExpanded: Boolean,
     priority: String,
     date: String,
     onDismissRequest: () -> Unit,
     onDropDownMenuClick: () -> Unit,
+    onDropDownMenuItemSelected: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -54,7 +109,8 @@ fun TaskItem(
                 onCheckedChange = onCheckedChange,
                 isTitleFocused = isTitleFocused,
                 onTitleFocusChanged = onTitleFocusChanged,
-                taskExpanded = taskExpanded
+                taskExpanded = taskExpanded,
+                onExpandTask = onExpandTask
             )
             TaskBodySection(
                 content = content,
@@ -65,7 +121,8 @@ fun TaskItem(
                 date = date,
                 dropDownExpanded = dropDownExpanded,
                 onDismissRequest = onDismissRequest,
-                onDropDownMenuClick = onDropDownMenuClick
+                onDropDownMenuClick = onDropDownMenuClick,
+                onDropDownMenuItemSelected = onDropDownMenuItemSelected
             )
         }
     }
@@ -88,11 +145,13 @@ fun TaskItemPreview() {
             onTitleFocusChanged = {},
             onContentFocusChanged = {},
             taskExpanded = true,
+            onExpandTask = {},
             dropDownExpanded = true,
             priority = "None",
             date = "01/11/2022",
             onDismissRequest = {},
-            onDropDownMenuClick = {}
+            onDropDownMenuClick = {},
+            onDropDownMenuItemSelected = {}
         )
     }
 }

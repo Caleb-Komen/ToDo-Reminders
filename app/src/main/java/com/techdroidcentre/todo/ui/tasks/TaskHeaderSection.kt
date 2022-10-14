@@ -31,6 +31,7 @@ fun TaskHeaderSection(
     isTitleFocused: Boolean,
     onTitleFocusChanged: (FocusState) -> Unit,
     taskExpanded: Boolean,
+    onExpandTask: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -46,7 +47,7 @@ fun TaskHeaderSection(
             onFocusChanged = onTitleFocusChanged,
             modifier = Modifier.weight(1f)
         )
-        IconButton(onClick = { /*TODO*/ }) {
+        IconButton(onClick = onExpandTask) {
             if (taskExpanded)
                 Icon(
                     imageVector = Icons.Filled.KeyboardArrowUp,
@@ -98,6 +99,6 @@ fun TaskTitleTextField(
 @Composable
 fun TaskHeaderSectionPreview() {
     ToDoTheme {
-        TaskHeaderSection("Hello".repeat(12), {}, false, {}, false, {}, false)
+        TaskHeaderSection("Hello".repeat(12), {}, false, {}, false, {}, false, {})
     }
 }
