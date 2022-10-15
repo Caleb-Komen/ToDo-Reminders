@@ -24,11 +24,18 @@ class TasksViewModel @Inject constructor(
 ): ViewModel() {
     private val _uiState = mutableStateOf(TasksUIState())
     val uiState: State<TasksUIState> = _uiState
+    
+    var taskTitle by mutableStateOf("")
+        private set
 
     private val todoListId = savedStateHandle.get<Long>(TODOLIST_ID_KEY) ?: 0L
     private val colour = savedStateHandle.get<Int>(COLOUR_KEY) ?: 0
 
-    fun retrieveTasks(todoListId: Long) {
+    init {
+        retrieveTasks(todoListId)
+    }
+
+    private fun retrieveTasks(todoListId: Long) {
         _uiState.value = _uiState.value.copy(
             isLoading = true
         )
@@ -46,6 +53,10 @@ class TasksViewModel @Inject constructor(
         viewModelScope.launch {
             addTaskUseCase(todoListId, task)
         }
+    }
+
+    fun updateTitle(title: String) {
+        taskTitle = title
     }
 
 }

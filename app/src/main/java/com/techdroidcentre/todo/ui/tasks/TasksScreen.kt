@@ -1,8 +1,7 @@
 package com.techdroidcentre.todo.ui.tasks
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -12,6 +11,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.techdroidcentre.todo.data.model.Task
+import com.techdroidcentre.todo.data.util.Priority
 import com.techdroidcentre.todo.ui.theme.ToDoTheme
 
 @ExperimentalMaterial3Api
@@ -23,7 +24,7 @@ fun TasksScreen(
     val tasks = viewModel.uiState.value.tasks
 
     LazyColumn(
-        modifier = modifier.background(Color.White),
+        modifier = modifier.background(Color.White).fillMaxSize(),
         contentPadding = PaddingValues(8.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
@@ -31,6 +32,18 @@ fun TasksScreen(
             TaskItem(
                 task = task,
                 saveTask = { viewModel.addTask(it) }
+            )
+        }
+        item {
+            NewTaskItem(
+                value = viewModel.taskTitle,
+                onValueChange = {
+                    viewModel.updateTitle(it)
+                },
+                onDone = {
+                    viewModel.addTask(Task(0L,viewModel.taskTitle, "", 0L, Priority.NONE))
+                    viewModel.updateTitle("")
+                }
             )
         }
     }
