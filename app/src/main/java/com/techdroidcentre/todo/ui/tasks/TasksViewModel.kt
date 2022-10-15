@@ -10,6 +10,8 @@ import androidx.lifecycle.viewModelScope
 import com.techdroidcentre.todo.data.model.Task
 import com.techdroidcentre.todo.domain.usecases.AddTaskUseCase
 import com.techdroidcentre.todo.domain.usecases.GetTasksUseCase
+import com.techdroidcentre.todo.ui.COLOUR_KEY
+import com.techdroidcentre.todo.ui.TODOLIST_ID_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,13 +25,8 @@ class TasksViewModel @Inject constructor(
     private val _uiState = mutableStateOf(TasksUIState())
     val uiState: State<TasksUIState> = _uiState
 
-    private val todoListId = savedStateHandle.get<Long>("todoListId") ?: 0 // TODO: Change this
-
-    var taskTitle by mutableStateOf("")
-        private set
-
-    var taskContent by mutableStateOf("")
-        private set
+    private val todoListId = savedStateHandle.get<Long>(TODOLIST_ID_KEY) ?: 0L
+    private val colour = savedStateHandle.get<Int>(COLOUR_KEY) ?: 0
 
     fun retrieveTasks(todoListId: Long) {
         _uiState.value = _uiState.value.copy(
@@ -51,11 +48,4 @@ class TasksViewModel @Inject constructor(
         }
     }
 
-    fun updateTaskTitle(title: String) {
-        taskTitle = title
-    }
-
-    fun updateTaskContent(content: String) {
-        taskContent  = content
-    }
 }

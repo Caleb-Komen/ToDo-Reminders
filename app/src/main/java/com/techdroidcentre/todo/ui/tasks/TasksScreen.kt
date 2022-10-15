@@ -40,9 +40,6 @@ fun TasksScreen(
 @Preview(showBackground = true)
 @Composable
 fun TasksScreenPreview() {
-    val tasks = List(5) {
-        TaskState(it.toLong(), "Title $it", "content $it")
-    }
     ToDoTheme {
         TasksScreen()
     }

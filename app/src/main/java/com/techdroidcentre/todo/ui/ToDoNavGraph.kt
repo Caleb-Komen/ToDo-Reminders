@@ -30,7 +30,7 @@ fun ToDoNavGraph(
                 }
             )
         ) {
-            ToDoListScreen()
+            ToDoListScreen(navController = navController)
         }
 
         composable(

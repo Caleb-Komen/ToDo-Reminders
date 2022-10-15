@@ -13,15 +13,18 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+@ExperimentalMaterial3Api
 @Composable
 fun ToDoListItem(
     toDoState: ToDoState,
+    onClick: (Long, Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color(toDoState.colour))
+        colors = CardDefaults.cardColors(containerColor = Color(toDoState.colour)),
+        onClick = { onClick(toDoState.id, toDoState.colour) }
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -78,6 +81,7 @@ fun TaskSnippetPreview() {
     TaskSnippet("A task")
 }
 
+@ExperimentalMaterial3Api
 @Preview
 @Composable
 fun ToDoListItemPreview() {
@@ -87,6 +91,7 @@ fun ToDoListItemPreview() {
             "New ToDo",
             List(5) { "Task $it" },
             Color(0xFF2367AB).toArgb()
-        )
+        ),
+        {_,_ -> }
     )
 }
