@@ -2,6 +2,7 @@ package com.techdroidcentre.todo.ui.todos
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.techdroidcentre.todo.data.model.ToDoList
@@ -14,7 +15,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ToDoListViewModel @Inject constructor(
     private val getAllToDoListUseCase: GetAllToDoListUseCase,
-    private val addToDoListUseCase: AddToDoListUseCase
+    private val addToDoListUseCase: AddToDoListUseCase,
+    savedStateHandle: SavedStateHandle
 ): ViewModel() {
     private val _toDoListViewState = mutableStateOf(ToDoListViewState())
     val toDoListViewState: State<ToDoListViewState> = _toDoListViewState

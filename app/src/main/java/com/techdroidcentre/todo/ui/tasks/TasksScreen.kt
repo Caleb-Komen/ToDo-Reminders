@@ -11,16 +11,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.techdroidcentre.todo.ui.theme.ToDoTheme
 
 @ExperimentalMaterial3Api
 @Composable
 fun TasksScreen(
-    tasks: List<TaskState>,
     modifier: Modifier = Modifier,
-    viewModel: TasksViewModel = viewModel()
+    viewModel: TasksViewModel = hiltViewModel()
 ) {
+    val tasks = viewModel.uiState.value.tasks
+
     LazyColumn(
         modifier = modifier.background(Color.White),
         contentPadding = PaddingValues(8.dp),
@@ -43,6 +44,6 @@ fun TasksScreenPreview() {
         TaskState(it.toLong(), "Title $it", "content $it")
     }
     ToDoTheme {
-        TasksScreen(tasks)
+        TasksScreen()
     }
 }

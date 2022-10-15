@@ -16,22 +16,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
-fun ToDoListItemScreen(
+fun ToDoListScreen(
     modifier: Modifier = Modifier,
-    viewModel: ToDoListViewModel = viewModel()
+    viewModel: ToDoListViewModel = hiltViewModel()
 ) {
     val toDoListViewState by viewModel.toDoListViewState
-    ToDoListItemScreen(
+    ToDoListScreen(
         viewState = toDoListViewState,
         modifier = modifier
     )
 }
 
 @Composable
-fun ToDoListItemScreen(
+fun ToDoListScreen(
     viewState: ToDoListViewState,
     modifier: Modifier = Modifier
 ) {
@@ -73,7 +73,7 @@ fun ToDoListItemScreenPreview() {
             Color(0xFF2367AB).toArgb()
         )
     }
-    ToDoListItemScreen(
+    ToDoListScreen(
         ToDoListViewState(
             todos = todos
         )
