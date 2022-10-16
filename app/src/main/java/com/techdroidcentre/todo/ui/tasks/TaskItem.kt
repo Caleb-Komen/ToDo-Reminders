@@ -1,5 +1,8 @@
 package com.techdroidcentre.todo.ui.tasks
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -92,7 +95,11 @@ fun TaskItem(
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier,
+        modifier = modifier.animateContentSize(
+            animationSpec = spring(
+                stiffness = Spring.StiffnessLow
+            )
+        ),
         onClick = { /*TODO*/ },
         shape = ShapeDefaults.ExtraSmall.copy(CornerSize(2.dp)),
         elevation = CardDefaults.cardElevation(8.dp)
@@ -112,18 +119,20 @@ fun TaskItem(
                 taskExpanded = taskExpanded,
                 onExpandTask = onExpandTask
             )
-            TaskBodySection(
-                content = content,
-                onContentChange = onContentChange,
-                isContentFocused = isContentFocused,
-                onContentFocusChanged = onContentFocusChanged,
-                priority = priority,
-                date = date,
-                dropDownExpanded = dropDownExpanded,
-                onDismissRequest = onDismissRequest,
-                onDropDownMenuClick = onDropDownMenuClick,
-                onDropDownMenuItemSelected = onDropDownMenuItemSelected
-            )
+            if (taskExpanded) {
+                TaskBodySection(
+                    content = content,
+                    onContentChange = onContentChange,
+                    isContentFocused = isContentFocused,
+                    onContentFocusChanged = onContentFocusChanged,
+                    priority = priority,
+                    date = date,
+                    dropDownExpanded = dropDownExpanded,
+                    onDismissRequest = onDismissRequest,
+                    onDropDownMenuClick = onDropDownMenuClick,
+                    onDropDownMenuItemSelected = onDropDownMenuItemSelected
+                )
+            }
         }
     }
 }
