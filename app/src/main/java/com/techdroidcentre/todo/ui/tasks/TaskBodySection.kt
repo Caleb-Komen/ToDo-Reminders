@@ -14,6 +14,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.techdroidcentre.todo.ui.theme.ToDoTheme
@@ -133,13 +134,12 @@ fun PriorityDropDownMenu(
                 )
                 DropdownMenu(
                     expanded = dropDownExpanded,
-                    onDismissRequest = onDismissRequest,
-                    modifier = modifier.width(56.dp)
+                    onDismissRequest = onDismissRequest
                 ) {
                     priorities.forEach {
                         DropdownMenuItem(
                             text = { Text(text = it) },
-                            onClick = { onDropDownMenuItemSelected(it) }
+                            onClick = { onDropDownMenuItemSelected(it.uppercase()) }
                         )
                     }
                 }

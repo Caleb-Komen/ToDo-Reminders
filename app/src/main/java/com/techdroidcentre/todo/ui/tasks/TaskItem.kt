@@ -68,7 +68,10 @@ fun TaskItem(
         date = Util.toDateString(task.dueDate),
         onDismissRequest = { dropDownExpanded = false },
         onDropDownMenuClick = { dropDownExpanded = true },
-        onDropDownMenuItemSelected = { priority = it},
+        onDropDownMenuItemSelected = {
+            priority = it
+            dropDownExpanded = false
+        },
         onTaskDelete = { deleteTask(task.id) }
     )
 }
