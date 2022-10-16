@@ -25,7 +25,8 @@ import com.techdroidcentre.todo.ui.util.Util
 @Composable
 fun TaskItem(
     task: TaskState,
-    saveTask: (task:Task) -> Unit
+    saveTask: (task:Task) -> Unit,
+    deleteTask: (id: Long) -> Unit,
 ) {
     val originalTitle = task.title
     val originalContent = task.content
@@ -67,7 +68,8 @@ fun TaskItem(
         date = Util.toDateString(task.dueDate),
         onDismissRequest = { dropDownExpanded = false },
         onDropDownMenuClick = { dropDownExpanded = true },
-        onDropDownMenuItemSelected = { priority = it}
+        onDropDownMenuItemSelected = { priority = it},
+        onTaskDelete = { deleteTask(task.id) }
     )
 }
 
@@ -92,6 +94,7 @@ fun TaskItem(
     onDismissRequest: () -> Unit,
     onDropDownMenuClick: () -> Unit,
     onDropDownMenuItemSelected: (String) -> Unit,
+    onTaskDelete: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -130,7 +133,8 @@ fun TaskItem(
                     dropDownExpanded = dropDownExpanded,
                     onDismissRequest = onDismissRequest,
                     onDropDownMenuClick = onDropDownMenuClick,
-                    onDropDownMenuItemSelected = onDropDownMenuItemSelected
+                    onDropDownMenuItemSelected = onDropDownMenuItemSelected,
+                    onTaskDelete = onTaskDelete
                 )
             }
         }
@@ -160,7 +164,8 @@ fun TaskItemPreview() {
             date = "01/11/2022",
             onDismissRequest = {},
             onDropDownMenuClick = {},
-            onDropDownMenuItemSelected = {}
+            onDropDownMenuItemSelected = {},
+            onTaskDelete = {}
         )
     }
 }

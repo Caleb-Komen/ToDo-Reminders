@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.techdroidcentre.todo.data.model.Task
 import com.techdroidcentre.todo.domain.usecases.AddTaskUseCase
+import com.techdroidcentre.todo.domain.usecases.DeleteTaskUseCase
 import com.techdroidcentre.todo.domain.usecases.GetTasksUseCase
 import com.techdroidcentre.todo.ui.COLOUR_KEY
 import com.techdroidcentre.todo.ui.TODOLIST_ID_KEY
@@ -20,6 +21,7 @@ import javax.inject.Inject
 class TasksViewModel @Inject constructor(
     private val getTasksUseCase: GetTasksUseCase,
     private val addTaskUseCase: AddTaskUseCase,
+    private val deleteTaskUseCase: DeleteTaskUseCase,
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
     private val _uiState = mutableStateOf(TasksUIState())
@@ -59,6 +61,12 @@ class TasksViewModel @Inject constructor(
 
     fun updateTitle(title: String) {
         taskTitle = title
+    }
+
+    fun deleteTask(taskId: Long) {
+        viewModelScope.launch {
+            deleteTaskUseCase(taskId)
+        }
     }
 
 }

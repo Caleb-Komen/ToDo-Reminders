@@ -29,10 +29,11 @@ fun TasksScreen(
         contentPadding = PaddingValues(8.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        items(items = tasks) { task ->
+        items(items = tasks, key = { task -> task.id }) { task ->
             TaskItem(
                 task = task,
-                saveTask = { viewModel.addTask(it) }
+                saveTask = { viewModel.addTask(it) },
+                deleteTask = { viewModel.deleteTask(it) }
             )
         }
         item {

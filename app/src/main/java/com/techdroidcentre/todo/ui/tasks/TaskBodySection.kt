@@ -31,6 +31,7 @@ fun TaskBodySection(
     onDismissRequest: () -> Unit,
     onDropDownMenuClick: () -> Unit,
     onDropDownMenuItemSelected: (String) -> Unit,
+    onTaskDelete: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
@@ -57,7 +58,7 @@ fun TaskBodySection(
             onFocusChanged = onContentFocusChanged
         )
         Button(
-            onClick = { /*TODO*/ },
+            onClick = onTaskDelete,
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFC01C28)),
             shape = ShapeDefaults.Small,
             modifier = Modifier.align(Alignment.End)
@@ -183,16 +184,9 @@ val priorities = arrayOf("High", "Medium", "Low", "None")
 fun TaskBodySectionPreview() {
     ToDoTheme {
         TaskBodySection(
-            "Task content",
-            {},
-            false,
-            {},
-            "None",
-            "01/01/2022",
-            false,
-            {},
-            {},
-            {}
+            "Task content", {}, false, {},
+            "None", "01/01/2022", false,
+            {}, {}, {}, {}
         )
     }
 }
