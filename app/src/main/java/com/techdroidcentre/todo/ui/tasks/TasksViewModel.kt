@@ -29,7 +29,9 @@ class TasksViewModel @Inject constructor(
         private set
 
     private val todoListId = savedStateHandle.get<Long>(TODOLIST_ID_KEY) ?: 0L
-    private val colour = savedStateHandle.get<Int>(COLOUR_KEY) ?: 0
+    private val colour = (savedStateHandle.get<Int>(COLOUR_KEY) ?: 0).also {
+        _uiState.value = _uiState.value.copy(colour = it)
+    }
 
     init {
         retrieveTasks(todoListId)

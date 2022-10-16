@@ -22,9 +22,10 @@ fun TasksScreen(
     viewModel: TasksViewModel = hiltViewModel()
 ) {
     val tasks = viewModel.uiState.value.tasks
+    val colour = viewModel.uiState.value.colour
 
     LazyColumn(
-        modifier = modifier.background(Color.White).fillMaxSize(),
+        modifier = modifier.background(Color(colour)).fillMaxSize(),
         contentPadding = PaddingValues(8.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
