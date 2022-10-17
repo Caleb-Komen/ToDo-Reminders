@@ -1,6 +1,7 @@
 package com.techdroidcentre.todo.ui
 
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -15,6 +16,7 @@ import com.techdroidcentre.todo.ui.todos.ToDoListScreen
 @Composable
 fun ToDoNavGraph(
     navController: NavHostController,
+    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -44,7 +46,7 @@ fun ToDoNavGraph(
                 }
             )
         ) {
-            TasksScreen()
+            TasksScreen(snackbarHostState = snackbarHostState)
         }
     }
 }

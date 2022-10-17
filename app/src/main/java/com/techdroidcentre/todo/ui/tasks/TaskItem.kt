@@ -26,7 +26,7 @@ import com.techdroidcentre.todo.ui.util.Util
 fun TaskItem(
     task: TaskState,
     saveTask: (task:Task) -> Unit,
-    deleteTask: (id: Long) -> Unit,
+    deleteTask: (task: Task) -> Unit
 ) {
     val originalTitle = task.title
     val originalContent = task.content
@@ -64,15 +64,15 @@ fun TaskItem(
         taskExpanded = taskExpanded,
         onExpandTask = { taskExpanded = !taskExpanded},
         dropDownExpanded = dropDownExpanded,
-        priority = task.priority.name,
-        date = Util.toDateString(task.dueDate),
+        priority = priority,
+        date = if (dueDate != 0L) Util.toDateString(dueDate) else "No date set",
         onDismissRequest = { dropDownExpanded = false },
         onDropDownMenuClick = { dropDownExpanded = true },
         onDropDownMenuItemSelected = {
             priority = it
             dropDownExpanded = false
         },
-        onTaskDelete = { deleteTask(task.id) }
+        onTaskDelete = { deleteTask(task.toDomainModel()) }
     )
 }
 

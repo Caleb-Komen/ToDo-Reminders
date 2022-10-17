@@ -22,3 +22,7 @@ data class TaskState(
 fun Task.toViewState(): TaskState {
     return TaskState(id, title, content, dueDate, priority)
 }
+
+fun TaskState.toDomainModel(): Task {
+    return Task(id, title, content, dueDate, priority)
+}
