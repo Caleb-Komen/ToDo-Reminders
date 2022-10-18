@@ -4,28 +4,66 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.techdroidcentre.todo.data.model.Task
 import com.techdroidcentre.todo.data.util.Priority
+import com.techdroidcentre.todo.ui.components.ColourPicker
+import com.techdroidcentre.todo.ui.components.TasksTopBar
+import com.techdroidcentre.todo.ui.components.TopBar
 import com.techdroidcentre.todo.ui.theme.ToDoTheme
+import com.techdroidcentre.todo.ui.util.colours
 import kotlinx.coroutines.launch
 
 @ExperimentalMaterial3Api
 @Composable
 fun TasksScreen(
     snackbarHostState: SnackbarHostState,
+    modifier: Modifier = Modifier
+) {
+    val viewModel: TasksViewModel = hiltViewModel()
+    var showColourPickerDialog by remember { mutableStateOf(false) }
+
+    if (showColourPickerDialog) {
+        ColourPicker(
+            colours = colours.map { it.toArgb() },
+            closeDialog = {
+                showColourPickerDialog = false
+            },
+            viewModel = viewModel
+        )
+    }
+
+    Scaffold(
+        topBar = {
+            TasksTopBar {
+                showColourPickerDialog = true
+            }
+        },
+        snackbarHost = {
+            SnackbarHost(hostState =snackbarHostState)
+        }
+    ) {
+        TasksScreen(
+            snackbarHostState = snackbarHostState,
+            modifier = modifier.padding(it),
+            viewModel = viewModel
+        )
+    }
+}
+
+@ExperimentalMaterial3Api
+@Composable
+fun TasksScreen(
+    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
-    viewModel: TasksViewModel = hiltViewModel()
+    viewModel: TasksViewModel
 ) {
     val tasks = viewModel.uiState.value.tasks
     val colour = viewModel.uiState.value.colour

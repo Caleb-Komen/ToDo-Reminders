@@ -1,16 +1,13 @@
 package com.techdroidcentre.todo.ui.todos
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,6 +17,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.techdroidcentre.todo.ui.Screen
+import com.techdroidcentre.todo.ui.components.NewToDoListDialog
+import com.techdroidcentre.todo.ui.components.TopBar
 
 @ExperimentalMaterial3Api
 @Composable
@@ -28,16 +27,35 @@ fun ToDoListScreen(
     modifier: Modifier = Modifier,
     viewModel: ToDoListViewModel = hiltViewModel()
 ) {
+    var value by remember { mutableStateOf("") }
+    var showNewListDialog by remember { mutableStateOf(false) }
     val toDoListViewState by viewModel.toDoListViewState
-    ToDoListScreen(
-        viewState = toDoListViewState,
-        onClick = { id, colour ->
-            navController.navigate(
-                Screen.TasksScreen.passTodoListIdAndColour(id, colour)
-            )
-        },
-        modifier = modifier
-    )
+
+    if (showNewListDialog) {
+        NewToDoListDialog(
+            value = value,
+            onValueChange = { value = it },
+            dismissDialog = { showNewListDialog = false }
+        )
+    }
+
+    Scaffold(
+        topBar = {
+            TopBar {
+                showNewListDialog = true
+            }
+        }
+    ) {
+        ToDoListScreen(
+            viewState = toDoListViewState,
+            onClick = { id, colour ->
+                navController.navigate(
+                    Screen.TasksScreen.passTodoListIdAndColour(id, colour)
+                )
+            },
+            modifier = modifier.padding(it)
+        )
+    }
 }
 
 @ExperimentalMaterial3Api

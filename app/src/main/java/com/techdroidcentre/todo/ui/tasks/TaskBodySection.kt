@@ -185,7 +185,7 @@ fun TaskBodySectionPreview() {
         TaskBodySection(
             "Task content", {}, false, {},
             "None", "01/01/2022", false,
-            {}, {}, {}, {}, {}
+            {}, {}, {}, {}
         )
     }
 }

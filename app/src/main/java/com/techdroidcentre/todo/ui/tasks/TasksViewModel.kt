@@ -63,6 +63,10 @@ class TasksViewModel @Inject constructor(
         taskTitle = title
     }
 
+    fun updateColour(colour: Int) {
+        _uiState.value = _uiState.value.copy(colour = colour)
+    }
+
     fun deleteTask(taskId: Long) {
         viewModelScope.launch {
             deleteTaskUseCase(taskId)
