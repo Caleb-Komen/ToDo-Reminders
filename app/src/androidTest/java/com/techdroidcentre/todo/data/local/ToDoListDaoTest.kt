@@ -36,6 +36,19 @@ class ToDoListDaoTest: BaseTest() {
     }
 
     @Test
+    fun getToDoList() = runTest {
+        val todo = Data.toDos[0]
+        val result = toDoListDao.getToDoList(todo.id).first()
+        Truth.assertThat(result).isEqualTo(todo)
+    }
+
+    @Test
+    fun getToDoList_unknownId_returnNull() = runTest {
+        val result = toDoListDao.getToDoList(-1L).first()
+        Truth.assertThat(result).isNull()
+    }
+
+    @Test
     fun addToDoList_toDoListAddedToDb() = runTest {
         val todoList = ToDoListEntity(
             3L,

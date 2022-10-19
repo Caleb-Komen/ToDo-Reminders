@@ -19,6 +19,12 @@ class ToDoListRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getToDoList(id: Long): Flow<ToDoList?> {
+        return toDoListDao.getToDoList(id).map {
+            it?.toDomainModel()
+        }
+    }
+
     override suspend fun addToDoList(todoList: ToDoList) {
         toDoListDao.addToDoList(todoList.toEntity())
     }

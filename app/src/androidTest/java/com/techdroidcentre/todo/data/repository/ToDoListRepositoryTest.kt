@@ -36,6 +36,19 @@ class ToDoListRepositoryTest: BaseTest() {
     }
 
     @Test
+    fun getToDoList() = runTest {
+        val todo = todos[0]
+        val result = repository.getToDoList(todo.id).first()
+        Truth.assertThat(result).isEqualTo(todo)
+    }
+
+    @Test
+    fun getToDoList_unknownId_returnNull() = runTest {
+        val result = repository.getToDoList(-1L).first()
+        Truth.assertThat(result).isNull()
+    }
+
+    @Test
     fun addToDoList() = runTest {
         val todo = ToDoList(3L, "Jetpack", 0)
         repository.addToDoList(todo)

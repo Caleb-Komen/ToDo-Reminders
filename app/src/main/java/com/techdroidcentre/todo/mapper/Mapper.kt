@@ -25,6 +25,15 @@ fun ToDoListWithTasksEntity.toDomainModel(): ToDoList {
     )
 }
 
+fun ToDoListEntity.toDomainModel(): ToDoList {
+    return ToDoList(
+        id = id,
+        title = title,
+        colour = colour,
+        tasks = emptyList()
+    )
+}
+
 fun Task.toEntity(todoListId: Long): TaskEntity {
     return TaskEntity(
         id = id,

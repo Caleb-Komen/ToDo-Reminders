@@ -10,6 +10,9 @@ interface ToDoListDao {
     @Query("SELECT * FROM todo_list")
     fun getAllToDoList(): Flow<List<ToDoListWithTasksEntity>>
 
+    @Query("SELECT * FROM todo_list WHERE id = :id")
+    fun getToDoList(id: Long): Flow<ToDoListEntity?>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addToDoList(toDoList: ToDoListEntity)
 
