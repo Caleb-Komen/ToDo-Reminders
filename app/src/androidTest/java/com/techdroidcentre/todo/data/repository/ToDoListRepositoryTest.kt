@@ -58,6 +58,15 @@ class ToDoListRepositoryTest: BaseTest() {
     }
 
     @Test
+    fun updateToDoList() = runTest {
+        var todo = todos[0]
+        todo = todo.copy(title = "Writing tests")
+        repository.updateToDoList(todo)
+        val result = repository.getToDoList(todo.id).first()
+        Truth.assertThat(result?.title).isEqualTo(todo.title)
+    }
+
+    @Test
     fun deleteToDoList() = runTest {
         var todos = repository.getAllToDoList().first()
         val todoToDelete = todos[0]

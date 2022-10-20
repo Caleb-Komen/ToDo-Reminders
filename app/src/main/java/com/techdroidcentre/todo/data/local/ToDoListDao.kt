@@ -16,6 +16,9 @@ interface ToDoListDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addToDoList(toDoList: ToDoListEntity)
 
+    @Update
+    suspend fun updateToDoList(todoList: ToDoListEntity)
+
     @Query("DELETE FROM todo_list WHERE id = :id")
     suspend fun deleteToDoList(id: Long)
 }

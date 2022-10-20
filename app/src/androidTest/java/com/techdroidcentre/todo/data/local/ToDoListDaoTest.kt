@@ -63,6 +63,15 @@ class ToDoListDaoTest: BaseTest() {
     }
 
     @Test
+    fun updateToDoList() = runTest {
+        var todo = Data.toDos[0]
+        todo = todo.copy(title = "Compose UI framework")
+        toDoListDao.updateToDoList(todo)
+        val result = toDoListDao.getToDoList(todo.id).first()
+        Truth.assertThat(result?.title).isEqualTo(todo.title)
+    }
+
+    @Test
     fun deleteToDoList_toDoListAndTasksRemovedFromDb() = runTest {
         val taskDao = database.taskDao
         var todos = toDoListDao.getAllToDoList().first().map { it.toDoListEntity }

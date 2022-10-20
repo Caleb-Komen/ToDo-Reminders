@@ -29,6 +29,10 @@ class ToDoListRepositoryImpl @Inject constructor(
         toDoListDao.addToDoList(todoList.toEntity())
     }
 
+    override suspend fun updateToDoList(todoList: ToDoList) {
+        toDoListDao.updateToDoList(todoList.toEntity())
+    }
+
     override suspend fun deleteToDoList(id: Long) {
         toDoListDao.deleteToDoList(id)
     }

@@ -10,5 +10,7 @@ interface ToDoListRepository {
 
     suspend fun addToDoList(todoList: ToDoList)
 
+    suspend fun updateToDoList(todoList: ToDoList)
+
     suspend fun deleteToDoList(id: Long)
 }
