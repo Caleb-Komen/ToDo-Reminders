@@ -27,6 +27,9 @@ fun ToDoNavGraph(
         composable(
             route = Screen.ToDoListScreen.route,
             arguments = listOf(
+                navArgument(TODOLIST_ID_KEY) {
+                    type = NavType.LongType
+                },
                 navArgument(COLOUR_KEY) {
                     type = NavType.IntType
                 }
@@ -46,7 +49,7 @@ fun ToDoNavGraph(
                 }
             )
         ) {
-            TasksScreen(snackbarHostState = snackbarHostState)
+            TasksScreen(navController = navController, snackbarHostState = snackbarHostState)
         }
     }
 }

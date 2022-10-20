@@ -1,7 +1,11 @@
 package com.techdroidcentre.todo.ui.tasks
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
@@ -12,11 +16,13 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.techdroidcentre.todo.data.model.Task
 import com.techdroidcentre.todo.data.util.Priority
+import com.techdroidcentre.todo.ui.Screen
 import com.techdroidcentre.todo.ui.components.ColourPicker
 import com.techdroidcentre.todo.ui.components.TasksTopBar
-import com.techdroidcentre.todo.ui.components.TopBar
 import com.techdroidcentre.todo.ui.theme.ToDoTheme
 import com.techdroidcentre.todo.ui.util.colours
 import kotlinx.coroutines.launch
@@ -24,6 +30,7 @@ import kotlinx.coroutines.launch
 @ExperimentalMaterial3Api
 @Composable
 fun TasksScreen(
+    navController: NavHostController,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier
 ) {
@@ -55,6 +62,18 @@ fun TasksScreen(
             modifier = modifier.padding(it),
             viewModel = viewModel
         )
+    }
+    BackHandler {
+        navController.navigate(
+            Screen.ToDoListScreen.passIdAndColour(
+                viewModel.todoListId,
+                viewModel.colour
+            )
+        ) {
+            popUpTo(navController.graph.startDestinationId){
+                inclusive = true
+            }
+        }
     }
 }
 
@@ -115,6 +134,6 @@ fun TasksScreen(
 @Composable
 fun TasksScreenPreview() {
     ToDoTheme {
-        TasksScreen(SnackbarHostState())
+        TasksScreen(rememberNavController(), SnackbarHostState())
     }
 }

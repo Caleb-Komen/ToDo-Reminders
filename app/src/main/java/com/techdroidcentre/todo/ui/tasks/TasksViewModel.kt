@@ -30,10 +30,11 @@ class TasksViewModel @Inject constructor(
     var taskTitle by mutableStateOf("")
         private set
 
-    private val todoListId = savedStateHandle.get<Long>(TODOLIST_ID_KEY) ?: 0L
-    private val colour = (savedStateHandle.get<Int>(COLOUR_KEY) ?: 0).also {
+    val todoListId = checkNotNull(savedStateHandle.get<Long>(TODOLIST_ID_KEY))
+    var colour = checkNotNull(savedStateHandle.get<Int>(COLOUR_KEY)).also {
         _uiState.value = _uiState.value.copy(colour = it)
     }
+        private set
 
     init {
         retrieveTasks(todoListId)
@@ -64,6 +65,7 @@ class TasksViewModel @Inject constructor(
     }
 
     fun updateColour(colour: Int) {
+        this.colour = colour
         _uiState.value = _uiState.value.copy(colour = colour)
     }
 
