@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusState
@@ -16,7 +16,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.techdroidcentre.todo.ui.components.CalendarViewDialog
 import com.techdroidcentre.todo.ui.theme.ToDoTheme
+import com.techdroidcentre.todo.ui.util.Util
 
 @ExperimentalMaterial3Api
 @Composable
@@ -26,7 +28,8 @@ fun TaskBodySection(
     isContentFocused: Boolean,
     onContentFocusChanged: (FocusState) -> Unit,
     priority: String,
-    date: String,
+    date: Long,
+    onDateChange: (Long) -> Unit,
     dropDownExpanded: Boolean,
     onDismissRequest: () -> Unit,
     onDropDownMenuClick: () -> Unit,
@@ -48,7 +51,7 @@ fun TaskBodySection(
                 onDropDownMenuItemSelected = onDropDownMenuItemSelected
             )
             Spacer(modifier = Modifier.width(8.dp))
-            DateAndTime(date = date)
+            DateAndTime(date = date, onDateChange = onDateChange)
         }
         Spacer(modifier = Modifier.height(8.dp))
         TaskContentTextField(
@@ -153,9 +156,12 @@ fun PriorityDropDownMenu(
 
 @Composable
 fun DateAndTime(
-    date: String,
+    date: Long,
+    onDateChange: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var openDatePicker by remember { mutableStateOf(false) }
+
     Row(
         modifier = modifier.padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -163,7 +169,7 @@ fun DateAndTime(
         Text(text = "Due Date:")
         Spacer(modifier = Modifier.width(4.dp))
         Text(
-            text = date,
+            text = if (date != 0L) Util.toDateString(date) else "No date set",
             modifier = Modifier
                 .border(
                     width = 1.dp,
@@ -171,6 +177,15 @@ fun DateAndTime(
                     shape = MaterialTheme.shapes.extraSmall
                 )
                 .padding(8.dp)
+                .clickable { openDatePicker = true }
+        )
+    }
+
+    if (openDatePicker) {
+        CalendarViewDialog(
+            date = date,
+            onDateChange = onDateChange,
+            closeDialog = { openDatePicker = false }
         )
     }
 }
@@ -184,7 +199,7 @@ fun TaskBodySectionPreview() {
     ToDoTheme {
         TaskBodySection(
             "Task content", {}, false, {},
-            "None", "01/01/2022", false,
+            "None", 0L, {},false,
             {}, {}, {}, {}
         )
     }
