@@ -12,7 +12,8 @@ fun TaskEntity.toDomainModel(): Task {
         title = title,
         content = content,
         dueDate = dueDate,
-        priority = priority
+        priority = priority,
+        isComplete = isComplete
     )
 }
 
@@ -41,6 +42,7 @@ fun Task.toEntity(todoListId: Long): TaskEntity {
         content = content,
         dueDate = dueDate,
         priority = priority,
+        isComplete = isComplete,
         toDoListId = todoListId
     )
 }

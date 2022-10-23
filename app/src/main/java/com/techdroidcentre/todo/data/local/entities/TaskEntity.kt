@@ -26,6 +26,7 @@ data class TaskEntity(
     @ColumnInfo(name = "due_date")
     val dueDate: Long,
     val priority: Priority,
+    val isComplete: Boolean,
     @ColumnInfo(name = "todo_list_id")
     val toDoListId: Long
 )

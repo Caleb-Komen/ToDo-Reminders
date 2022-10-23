@@ -46,6 +46,7 @@ class TaskDaoTest: BaseTest() {
             "Finish theming in compose",
             0L,
             Priority.NONE,
+            false,
             1L
         )
         taskDao.addTask(task)

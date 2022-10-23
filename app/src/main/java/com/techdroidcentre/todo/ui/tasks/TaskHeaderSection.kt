@@ -2,21 +2,22 @@ package com.techdroidcentre.todo.ui.tasks
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
+import androidx.compose.material3.TextFieldDefaults.indicatorLine
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.techdroidcentre.todo.ui.theme.ToDoTheme
@@ -46,6 +47,20 @@ fun TaskHeaderSection(
             isFocused = isTitleFocused,
             onFocusChanged = onTitleFocusChanged,
             modifier = Modifier.weight(1f)
+                .drawBehind {
+                    val lineSize = size.copy(height = 1f)
+                    if (checked) drawLine(
+                        Color.Black,
+                        Offset(
+                            x = (size.width - lineSize.width) / 2f,
+                            y = (size.height - lineSize.height) / 2f
+                        ),
+                        Offset(
+                            x = size.width,
+                            y = size.height / 2f
+                        )
+                    )
+                }
         )
         IconButton(onClick = onExpandTask) {
             if (taskExpanded)
@@ -75,7 +90,7 @@ fun TaskTitleTextField(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier
-            .defaultMinSize(minWidth = 48.dp)
+            .widthIn(min = 48.dp)
             .onFocusChanged {
                 onFocusChanged(it)
             }
@@ -99,6 +114,6 @@ fun TaskTitleTextField(
 @Composable
 fun TaskHeaderSectionPreview() {
     ToDoTheme {
-        TaskHeaderSection("Hello".repeat(12), {}, false, {}, false, {}, false, {})
+        TaskHeaderSection("Hello".repeat(12), {}, true, {}, false, {}, false, {})
     }
 }

@@ -121,7 +121,7 @@ fun TasksScreen(
                     viewModel.updateTitle(it)
                 },
                 onDone = {
-                    viewModel.addTask(Task(0L,viewModel.taskTitle, "", 0L, Priority.NONE))
+                    viewModel.addTask(Task(0L,viewModel.taskTitle, "", 0L, Priority.NONE, false))
                     viewModel.updateTitle("")
                 }
             )

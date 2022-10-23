@@ -24,6 +24,7 @@ object Data {
             "Finish states and events in compose",
             0L,
             Priority.NONE,
+            false,
             1L
         ),
         TaskEntity(
@@ -32,6 +33,7 @@ object Data {
             "Go through jetpack compose animations documentation",
             0L,
             Priority.NONE,
+            false,
             1L
         ),
         TaskEntity(
@@ -40,6 +42,7 @@ object Data {
             "Use coroutines for asynchronous operations",
             0L,
             Priority.NONE,
+            false,
             2L
         )
     )

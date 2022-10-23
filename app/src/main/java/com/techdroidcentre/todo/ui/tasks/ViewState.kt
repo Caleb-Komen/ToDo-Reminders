@@ -16,13 +16,14 @@ data class TaskState(
     val title: String,
     val content: String = "",
     val dueDate: Long = 0L,
-    val priority: Priority = Priority.NONE
+    val priority: Priority = Priority.NONE,
+    val isComplete: Boolean
 )
 
 fun Task.toViewState(): TaskState {
-    return TaskState(id, title, content, dueDate, priority)
+    return TaskState(id, title, content, dueDate, priority, isComplete)
 }
 
 fun TaskState.toDomainModel(): Task {
-    return Task(id, title, content, dueDate, priority)
+    return Task(id, title, content, dueDate, priority, isComplete)
 }

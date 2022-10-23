@@ -37,6 +37,7 @@ fun TaskItem(
     var content by remember { mutableStateOf(task.content) }
     var priority by remember { mutableStateOf(task.priority.name) }
     var dueDate by remember { mutableStateOf(task.dueDate) }
+    var isComplete by remember { mutableStateOf(task.isComplete) }
     var isTitleFocused by remember { mutableStateOf(false) }
     var isContentFocused by remember { mutableStateOf(false) }
     var taskExpanded by remember { mutableStateOf(false) }
@@ -47,7 +48,7 @@ fun TaskItem(
         || originalPriority != priority
         || originalDueDate != dueDate) {
 
-        saveTask(Task(task.id, title, content, dueDate, Priority.valueOf(priority)))
+        saveTask(Task(task.id, title, content, dueDate, Priority.valueOf(priority), isComplete))
     }
 
     TaskItem(
@@ -55,8 +56,8 @@ fun TaskItem(
         content = content,
         onTitleChange = { title = it },
         onContentChange = { content = it},
-        checked = false, // TODO: Work on this
-        onCheckedChange = {}, // TODO: Work on this
+        checked = isComplete,
+        onCheckedChange = { isComplete = it },
         isTitleFocused = isTitleFocused,
         isContentFocused = isContentFocused,
         onTitleFocusChanged = { isTitleFocused = it.isFocused },

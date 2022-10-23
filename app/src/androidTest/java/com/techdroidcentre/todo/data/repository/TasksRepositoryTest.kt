@@ -18,8 +18,8 @@ import org.junit.runner.RunWith
 class TasksRepositoryTest: BaseTest() {
     private lateinit var tasksRepository: TasksRepository
     private val tasks = listOf(
-        Task(20L, "Testing & Debugging", "Finish testing & debugging codelab", 0L, Priority.NONE),
-        Task(21L, "DI", "Finish Hilt codelab", 0L, Priority.NONE)
+        Task(20L, "Testing & Debugging", "Finish testing & debugging codelab", 0L, Priority.NONE, false),
+        Task(21L, "DI", "Finish Hilt codelab", 0L, Priority.NONE, false)
     )
 
     @Before
@@ -37,7 +37,7 @@ class TasksRepositoryTest: BaseTest() {
 
     @Test
     fun addTask() = runTest {
-        val task = Task(22L, "States and Events", "Finish states and events in compose", 0L, Priority.NONE)
+        val task = Task(22L, "States and Events", "Finish states and events in compose", 0L, Priority.NONE, false)
         tasksRepository.addTask(1L, task)
 
         val result = tasksRepository.getTasks(1L).first()
