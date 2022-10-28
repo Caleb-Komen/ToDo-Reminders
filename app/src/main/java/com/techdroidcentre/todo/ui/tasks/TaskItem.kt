@@ -14,12 +14,21 @@ import androidx.compose.material3.ShapeDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusState
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.techdroidcentre.todo.data.model.Task
 import com.techdroidcentre.todo.data.util.Priority
+import com.techdroidcentre.todo.data.worker.KEY_TASK_TITLE
+import com.techdroidcentre.todo.data.worker.ReminderWorker
 import com.techdroidcentre.todo.ui.theme.ToDoTheme
 import com.techdroidcentre.todo.ui.util.Util
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 @ExperimentalMaterial3Api
 @Composable
@@ -49,6 +58,22 @@ fun TaskItem(
         || originalDueDate != dueDate) {
 
         saveTask(Task(task.id, title, content, dueDate, Priority.valueOf(priority), isComplete))
+    }
+
+    if (dueDate != 0L) {
+        val calendar = Calendar.getInstance()
+        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(
+            Calendar.DATE))
+        val duration = dueDate - calendar.timeInMillis
+        val workRequest = OneTimeWorkRequestBuilder<ReminderWorker>()
+            .setInitialDelay(duration, TimeUnit.MILLISECONDS)
+            .setInputData(workDataOf(KEY_TASK_TITLE to title))
+            .build()
+        if (duration > 0L) {
+            WorkManager.getInstance(LocalContext.current).enqueue(workRequest)
+        } else {
+            WorkManager.getInstance(LocalContext.current).cancelWorkById(workRequest.id)
+        }
     }
 
     TaskItem(
