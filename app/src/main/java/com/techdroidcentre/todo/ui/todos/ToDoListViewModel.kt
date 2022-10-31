@@ -12,6 +12,7 @@ import com.techdroidcentre.todo.domain.usecases.GetToDoListUseCase
 import com.techdroidcentre.todo.domain.usecases.UpdateToDoListUseCase
 import com.techdroidcentre.todo.ui.COLOUR_KEY
 import com.techdroidcentre.todo.ui.TODOLIST_ID_KEY
+import com.techdroidcentre.todo.ui.util.defaultId
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,7 +28,7 @@ class ToDoListViewModel @Inject constructor(
     private val _toDoListViewState = mutableStateOf(ToDoListViewState())
     val toDoListViewState: State<ToDoListViewState> = _toDoListViewState
 
-    private val todoListId = savedStateHandle.get<Long>(TODOLIST_ID_KEY) ?: 0L
+    private val todoListId = savedStateHandle.get<Long>(TODOLIST_ID_KEY) ?: defaultId
     val colour = savedStateHandle.get<Int>(COLOUR_KEY)?.also { colour ->
         viewModelScope.launch {
             getToDoListUseCase(todoListId).collect { todoList ->

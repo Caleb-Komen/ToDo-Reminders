@@ -1,5 +1,6 @@
 package com.techdroidcentre.todo.ui.util
 
+import androidx.compose.ui.graphics.toArgb
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -10,3 +11,6 @@ object Util {
         return sdf.format(date)
     }
 }
+
+const val defaultId = 0L
+val defaultColour = colours[0].toArgb()

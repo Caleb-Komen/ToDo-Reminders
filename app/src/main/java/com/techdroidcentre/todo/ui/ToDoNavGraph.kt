@@ -14,6 +14,8 @@ import com.techdroidcentre.todo.ui.scheduled.ScheduledTasksScreen
 import com.techdroidcentre.todo.ui.tasks.TasksScreen
 import com.techdroidcentre.todo.ui.today.TodayTasksScreen
 import com.techdroidcentre.todo.ui.todos.ToDoListScreen
+import com.techdroidcentre.todo.ui.util.defaultColour
+import com.techdroidcentre.todo.ui.util.defaultId
 
 @ExperimentalMaterial3Api
 @Composable
@@ -32,9 +34,11 @@ fun ToDoNavGraph(
             arguments = listOf(
                 navArgument(TODOLIST_ID_KEY) {
                     type = NavType.LongType
+                    defaultValue = defaultId
                 },
                 navArgument(COLOUR_KEY) {
                     type = NavType.IntType
+                    defaultValue = defaultColour
                 }
             )
         ) {
