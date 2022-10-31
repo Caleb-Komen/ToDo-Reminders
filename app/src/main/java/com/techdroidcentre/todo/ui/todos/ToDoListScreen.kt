@@ -23,39 +23,17 @@ import com.techdroidcentre.todo.ui.components.TopBar
 @ExperimentalMaterial3Api
 @Composable
 fun ToDoListScreen(
-    navController: NavHostController,
+    onClick: (Long, Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ToDoListViewModel = hiltViewModel()
 ) {
-    var value by remember { mutableStateOf("") }
-    var showNewListDialog by remember { mutableStateOf(false) }
     val toDoListViewState by viewModel.toDoListViewState
 
-    if (showNewListDialog) {
-        NewToDoListDialog(
-            value = value,
-            onValueChange = { value = it },
-            dismissDialog = { showNewListDialog = false }
-        )
-    }
-
-    Scaffold(
-        topBar = {
-            TopBar {
-                showNewListDialog = true
-            }
-        }
-    ) {
-        ToDoListScreen(
-            viewState = toDoListViewState,
-            onClick = { id, colour ->
-                navController.navigate(
-                    Screen.TasksScreen.passTodoListIdAndColour(id, colour)
-                )
-            },
-            modifier = modifier.padding(it)
-        )
-    }
+    ToDoListScreen(
+        viewState = toDoListViewState,
+        onClick = onClick,
+        modifier = modifier
+    )
 }
 
 @ExperimentalMaterial3Api

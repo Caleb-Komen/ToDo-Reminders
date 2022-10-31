@@ -4,12 +4,15 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.techdroidcentre.todo.ui.scheduled.ScheduledTasksScreen
 import com.techdroidcentre.todo.ui.tasks.TasksScreen
+import com.techdroidcentre.todo.ui.today.TodayTasksScreen
 import com.techdroidcentre.todo.ui.todos.ToDoListScreen
 
 @ExperimentalMaterial3Api
@@ -35,7 +38,21 @@ fun ToDoNavGraph(
                 }
             )
         ) {
-            ToDoListScreen(navController = navController)
+            ToDoListScreen(
+                onClick = { id, colour ->
+                    navController.navigate(
+                        Screen.TasksScreen.passTodoListIdAndColour(id, colour)
+                    )
+                }
+            )
+        }
+
+        composable(route = Screen.ScheduledTasksScreen.route) {
+            ScheduledTasksScreen()
+        }
+
+        composable(route = Screen.TodayTasksScreen.route) {
+            TodayTasksScreen()
         }
 
         composable(
@@ -51,5 +68,15 @@ fun ToDoNavGraph(
         ) {
             TasksScreen(navController = navController, snackbarHostState = snackbarHostState)
         }
+    }
+}
+
+fun NavHostController.navigateSingleTopTo(route: String) {
+    this.navigate(route) {
+        launchSingleTop = true
+        popUpTo(this@navigateSingleTopTo.graph.findStartDestination().id) {
+            saveState = true
+        }
+        restoreState = true
     }
 }
