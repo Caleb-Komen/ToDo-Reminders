@@ -1,8 +1,10 @@
 package com.techdroidcentre.todo.ui.home
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -10,9 +12,11 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import com.techdroidcentre.todo.ui.Screen
+import com.techdroidcentre.todo.ui.components.NewToDoListDialog
 import com.techdroidcentre.todo.ui.components.ToDoTabRow
+import com.techdroidcentre.todo.ui.components.TopBar
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
+@OptIn(ExperimentalLifecycleComposeApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     onToDoClick: (Long, Int) -> Unit,
@@ -21,17 +25,37 @@ fun HomeScreen(
 ) {
     val toDoListViewState by viewModel.toDoListViewState
     val tabState by viewModel.tabState.collectAsStateWithLifecycle()
+    var value by remember { mutableStateOf("") }
+    var showNewListDialog by remember { mutableStateOf(false) }
 
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        HomeContent(
-            tabState = tabState,
-            todoViewState = toDoListViewState,
-            onToDoClick = onToDoClick,
-            onTabSelected = viewModel::switchTab
+    if (showNewListDialog) {
+        NewToDoListDialog(
+            value = value,
+            onValueChange = { value = it },
+            dismissDialog = { showNewListDialog = false }
         )
+    }
+
+    Scaffold(
+        topBar = {
+            Column {
+                TopBar {
+                    showNewListDialog = true
+                }
+            }
+        }
+    ) {
+        Column(
+            modifier = modifier.padding(it),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            HomeContent(
+                tabState = tabState,
+                todoViewState = toDoListViewState,
+                onToDoClick = onToDoClick,
+                onTabSelected = viewModel::switchTab
+            )
+        }
     }
 }
 
