@@ -15,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.techdroidcentre.todo.ui.todos.EmptyListItem
-import com.techdroidcentre.todo.ui.todos.ToDoListItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

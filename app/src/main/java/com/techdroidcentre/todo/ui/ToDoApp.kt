@@ -7,11 +7,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.techdroidcentre.todo.ui.Screen.ToDoListScreen
 import com.techdroidcentre.todo.ui.components.NewToDoListDialog
-import com.techdroidcentre.todo.ui.components.ToDoTabRow
 import com.techdroidcentre.todo.ui.components.TopBar
 
 @ExperimentalMaterial3Api

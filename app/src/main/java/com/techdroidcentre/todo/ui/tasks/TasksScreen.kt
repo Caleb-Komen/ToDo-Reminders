@@ -65,7 +65,7 @@ fun TasksScreen(
     }
     BackHandler {
         navController.navigate(
-            Screen.ToDoListScreen.passIdAndColour(
+            Screen.HomeScreen.passIdAndColour(
                 viewModel.todoListId,
                 viewModel.colour
             )

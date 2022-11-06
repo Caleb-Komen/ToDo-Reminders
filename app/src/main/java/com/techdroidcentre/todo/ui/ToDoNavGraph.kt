@@ -32,7 +32,19 @@ fun ToDoNavGraph(
         startDestination = Screen.HomeScreen.route,
         modifier = modifier
     ) {
-        composable(route = Screen.HomeScreen.route) {
+        composable(
+            route = Screen.HomeScreen.route,
+            arguments = listOf(
+                navArgument(TODOLIST_ID_KEY) {
+                    type = NavType.LongType
+                    defaultValue = defaultId
+                },
+                navArgument(COLOUR_KEY) {
+                    type = NavType.IntType
+                    defaultValue = defaultColour
+                }
+            )
+        ) {
             HomeScreen(
                 onToDoClick = { id, colour ->
                     navController.navigate(
