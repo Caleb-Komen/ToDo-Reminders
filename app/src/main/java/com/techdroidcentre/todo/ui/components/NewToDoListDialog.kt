@@ -6,10 +6,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.techdroidcentre.todo.data.model.ToDoList
-import com.techdroidcentre.todo.ui.todos.ToDoListViewModel
+import com.techdroidcentre.todo.ui.home.HomeViewModel
 import com.techdroidcentre.todo.ui.util.colours
+import com.techdroidcentre.todo.ui.util.defaultColour
+import com.techdroidcentre.todo.ui.util.defaultId
 
 @ExperimentalMaterial3Api
 @Composable
@@ -18,7 +21,7 @@ fun NewToDoListDialog(
     onValueChange: (String) -> Unit,
     dismissDialog: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: ToDoListViewModel = viewModel()
+    viewModel: HomeViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
 
@@ -37,7 +40,7 @@ fun NewToDoListDialog(
             Button(
                 onClick = {
                     if (value.isNotBlank()) {
-                        viewModel.addToDoList(ToDoList(0, value, colours[0].toArgb()))
+                        viewModel.addToDoList(ToDoList(defaultId, value, defaultColour))
                         onValueChange("")
                     } else {
                         Toast.makeText(context, "List name cannot be empty", Toast.LENGTH_SHORT).show()

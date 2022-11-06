@@ -1,4 +1,4 @@
-package com.techdroidcentre.todo.ui.todos
+package com.techdroidcentre.todo.ui.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column

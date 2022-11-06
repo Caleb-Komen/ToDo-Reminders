@@ -3,20 +3,15 @@ package com.techdroidcentre.todo.ui
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import com.techdroidcentre.todo.ui.home.HomeScreen
-import com.techdroidcentre.todo.ui.scheduled.ScheduledTasksScreen
 import com.techdroidcentre.todo.ui.tasks.TasksScreen
-import com.techdroidcentre.todo.ui.today.TodayTasksScreen
-import com.techdroidcentre.todo.ui.todos.ToDoListScreen
 import com.techdroidcentre.todo.ui.util.defaultColour
 import com.techdroidcentre.todo.ui.util.defaultId
 
