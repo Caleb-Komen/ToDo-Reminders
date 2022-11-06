@@ -4,13 +4,10 @@ import android.widget.Toast
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.techdroidcentre.todo.data.model.ToDoList
 import com.techdroidcentre.todo.ui.home.HomeViewModel
-import com.techdroidcentre.todo.ui.util.colours
 import com.techdroidcentre.todo.ui.util.defaultColour
 import com.techdroidcentre.todo.ui.util.defaultId
 

@@ -10,8 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavBackStackEntry
-import com.techdroidcentre.todo.ui.Screen
 import com.techdroidcentre.todo.ui.components.NewToDoListDialog
 import com.techdroidcentre.todo.ui.components.ToDoTabRow
 import com.techdroidcentre.todo.ui.components.TopBar

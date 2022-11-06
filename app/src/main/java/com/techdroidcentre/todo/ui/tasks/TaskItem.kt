@@ -18,7 +18,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.techdroidcentre.todo.data.model.Task
@@ -26,7 +25,6 @@ import com.techdroidcentre.todo.data.util.Priority
 import com.techdroidcentre.todo.data.worker.KEY_TASK_TITLE
 import com.techdroidcentre.todo.data.worker.ReminderWorker
 import com.techdroidcentre.todo.ui.theme.ToDoTheme
-import com.techdroidcentre.todo.ui.util.Util
 import java.util.*
 import java.util.concurrent.TimeUnit
 
