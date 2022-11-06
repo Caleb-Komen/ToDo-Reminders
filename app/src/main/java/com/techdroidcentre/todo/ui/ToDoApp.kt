@@ -21,9 +21,6 @@ fun ToDoApp(modifier: Modifier = Modifier) {
     val snackbarHostState = remember { SnackbarHostState() }
     var value by remember { mutableStateOf("") }
     var showNewListDialog by remember { mutableStateOf(false) }
-    val currentBackStack by navController.currentBackStackEntryAsState()
-    val currentDestination = currentBackStack?.destination
-    val currentScreen = screens.find { it.route == currentDestination?.route } ?: ToDoListScreen
 
     if (showNewListDialog) {
         NewToDoListDialog(
@@ -39,13 +36,6 @@ fun ToDoApp(modifier: Modifier = Modifier) {
                 TopBar {
                     showNewListDialog = true
                 }
-                ToDoTabRow(
-                    selectedTabIndex = screens.indexOf(currentScreen),
-                    screens = screens,
-                    onTabSelected = { screen ->
-                        navController.navigateSingleTopTo(screen.route)
-                    }
-                )
             }
         }
     ) {

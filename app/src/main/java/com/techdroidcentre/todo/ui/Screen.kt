@@ -10,6 +10,7 @@ const val COLOUR_KEY = "colour"
 const val TODOLIST_ID_KEY = "todolist_id"
 
 sealed class Screen(val route: String, val title: String) {
+    object HomeScreen: Screen("home", "Home")
     object ToDoListScreen: Screen("$TODOLIST_SCREEN_ROUTE?id={$TODOLIST_ID_KEY}&colour={$COLOUR_KEY}", "Lists") {
         // helper method for passing arguments
         fun passIdAndColour(id: Long, colour: Int): String {

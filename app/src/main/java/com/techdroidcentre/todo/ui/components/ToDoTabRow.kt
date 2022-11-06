@@ -13,18 +13,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.techdroidcentre.todo.ui.Screen
+import com.techdroidcentre.todo.ui.home.ToDoTabState
 import com.techdroidcentre.todo.ui.screens
 
 @Composable
 fun ToDoTabRow(
-    selectedTabIndex: Int,
-    screens: List<Screen>,
-    onTabSelected: (Screen) -> Unit,
+    tabState: ToDoTabState,
+    onTabSelected: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
     TabRow(
-        selectedTabIndex = selectedTabIndex,
+        selectedTabIndex = tabState.currentIndex,
         indicator = {
             TabRowDefaults.Indicator(color = Color.Transparent)
         },
@@ -40,11 +40,11 @@ fun ToDoTabRow(
             )
             .clip(shape = MaterialTheme.shapes.small)
     ) {
-        screens.forEachIndexed { index, screen ->
+        tabState.titles.forEachIndexed { index, title ->
             TabItem(
-                selected = index == selectedTabIndex,
-                text = screen.title,
-                onClick = { onTabSelected(screen) }
+                selected = index == tabState.currentIndex,
+                text = title,
+                onClick = { onTabSelected(index) }
             )
         }
     }
@@ -79,7 +79,11 @@ fun TabItem(
 @Preview
 @Composable
 fun ToDoTabRowPreview() {
-    ToDoTabRow(0, screens, {})
+    ToDoTabRow(
+        ToDoTabState(
+            titles = listOf("Lists", "Scheduled", "Today"),
+            currentIndex = 0
+        ), {})
 }
 
 @Preview
