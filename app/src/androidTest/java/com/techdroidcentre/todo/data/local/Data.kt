@@ -22,7 +22,7 @@ object Data {
             10,
             "State and Events",
             "Finish states and events in compose",
-            0L,
+            System.currentTimeMillis(),
             Priority.NONE,
             false,
             1L
