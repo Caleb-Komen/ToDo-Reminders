@@ -88,7 +88,7 @@ fun ScheduledTaskHeader(
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = task.title,
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleMedium
             )
             Text(
                 text = "($todoTitle)",
@@ -129,9 +129,11 @@ fun ScheduledTaskBody(
         ) {
             Text(
                 text=task.content,
+                style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
+                    .heightIn(min = 96.dp)
             )
         }
     }

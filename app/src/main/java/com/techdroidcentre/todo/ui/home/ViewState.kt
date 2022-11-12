@@ -19,7 +19,7 @@ fun ToDoList.toViewState(): ToDoState{
     return ToDoState(
         id = id,
         title = title,
-        tasks = tasks.map { it.title },
+        tasks = tasks.filter { !it.isComplete }.map { it.title },
         colour = colour
     )
 }

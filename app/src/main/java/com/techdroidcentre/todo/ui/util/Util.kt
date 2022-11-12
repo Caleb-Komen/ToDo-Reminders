@@ -7,7 +7,7 @@ import java.util.*
 object Util {
     fun toDateString(dateInMs: Long): String {
         val date = Date(dateInMs)
-        val sdf = SimpleDateFormat("dd/MM/yyyy")
+        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.UK)
         return sdf.format(date)
     }
 }

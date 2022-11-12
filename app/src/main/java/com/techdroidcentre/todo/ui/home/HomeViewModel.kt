@@ -9,6 +9,7 @@ import com.techdroidcentre.todo.data.model.ToDoList
 import com.techdroidcentre.todo.domain.usecases.*
 import com.techdroidcentre.todo.ui.COLOUR_KEY
 import com.techdroidcentre.todo.ui.TODOLIST_ID_KEY
+import com.techdroidcentre.todo.ui.util.Util
 import com.techdroidcentre.todo.ui.util.defaultId
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,8 +17,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
 
 data class ToDoTabState(
@@ -92,9 +91,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             getScheduledTasksUseCase().collect {
                 val tasks = it.groupBy { task ->
-                    val dueDate = Date(task.dueDate)
-                    val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.UK)
-                    sdf.format(dueDate)
+                    Util.toDateString(task.dueDate)
                 }
                 _scheduledTasksState.value = _scheduledTasksState.value.copy(
                     tasks = tasks,

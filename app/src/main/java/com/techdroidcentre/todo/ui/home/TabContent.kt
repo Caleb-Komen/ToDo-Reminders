@@ -20,6 +20,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.techdroidcentre.todo.R
+import com.techdroidcentre.todo.ui.util.Util
+import java.text.SimpleDateFormat
+import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -75,21 +78,32 @@ fun ScheduledTabContent(
         } else {
             LazyColumn(
                 contentPadding = PaddingValues(12.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.fillMaxSize()
             ) {
                 state.tasks.forEach { (date, items) ->
                     item {
+                        val dueDate = SimpleDateFormat("dd/MM/yyyy", Locale.UK).parse(date)!!
+                        val today = SimpleDateFormat("dd/MM/yyyy", Locale.UK).parse(Util.toDateString(System.currentTimeMillis()))!!
+                        // probably not the best way to get yesterday and tomorrow's date but it works
+                        val yesterday = Date(today.time - 86400000)
+                        val tomorrow = Date(today.time + 86400000)
+                        val text = if (dueDate == today) "Today" else if(dueDate == yesterday) "Yesterday" else if(dueDate == tomorrow) "Tomorrow" else date
+                        val colour = if (dueDate == today) Color(0xFFF5C211) else if(dueDate > today) Color(0xFF26A269) else Color.Red
                         Text(
-                            text = date,
+                            text = text,
+                            color = colour,
                             modifier = Modifier.fillMaxSize()
-                                .padding(bottom = 8.dp)
                         )
                     }
                     items(items = items) { task ->
                         ScheduledTask(
                             task = task,
-                            todoTitle = "ToD0"
+                            todoTitle = "ToDo"
                         )
+                    }
+                    item {
+                        Spacer(modifier = Modifier.height(4.dp))
                     }
                 }
             }
@@ -115,6 +129,7 @@ fun TodayTabContent(
         } else {
             LazyColumn(
                 contentPadding = PaddingValues(12.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.fillMaxSize()
             ) {
                 items(items = state.tasks) { task ->

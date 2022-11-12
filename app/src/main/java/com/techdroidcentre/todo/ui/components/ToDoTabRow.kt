@@ -62,7 +62,7 @@ fun TabItem(
         modifier = modifier
             .height(56.dp)
             .background(
-                color = if (selected) Color.LightGray else MaterialTheme.colorScheme.background
+                color = if (selected) Color.LightGray else MaterialTheme.colorScheme.surface
             )
             .border(
                 width = 1.dp,

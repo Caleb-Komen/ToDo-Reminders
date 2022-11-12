@@ -3,6 +3,7 @@ package com.techdroidcentre.todo.ui.home
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,6 +36,7 @@ fun ToDoListItem(
         ) {
             Text(
                 text = toDoState.title,
+                style = MaterialTheme.typography.titleLarge,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 2,
                 fontSize = MaterialTheme.typography.titleMedium.fontSize
@@ -44,6 +46,9 @@ fun ToDoListItem(
                 Column {
                     tasks.take(5).forEach {
                         TaskSnippet(taskTitle = it)
+                    }
+                    if (tasks.size > 5) {
+                        Text(text = "\u22EE", modifier = Modifier.padding(start = 24.dp))
                     }
                 }
             }
@@ -63,11 +68,13 @@ fun TaskSnippet(
     ) {
         Icon(
             imageVector = Icons.Default.Check,
-            contentDescription = null
+            contentDescription = null,
+            modifier = Modifier.size(16.dp)
         )
 
         Text(
             text = taskTitle,
+            style = MaterialTheme.typography.bodySmall,
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
             modifier = Modifier.fillMaxWidth()

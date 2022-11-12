@@ -13,6 +13,7 @@ import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -115,7 +116,11 @@ fun PriorityDropDownMenu(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = "Priority:")
+        Text(
+            text = "Priority:",
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold
+        )
         Spacer(modifier = Modifier.width(4.dp))
         Row(
             modifier = Modifier
@@ -166,10 +171,15 @@ fun DateAndTime(
         modifier = modifier.padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = "Due Date:")
+        Text(
+            text = "Due Date:",
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold
+        )
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = if (date != 0L) Util.toDateString(date) else "No date set",
+            style = MaterialTheme.typography.titleMedium,
             modifier = Modifier
                 .border(
                     width = 1.dp,
