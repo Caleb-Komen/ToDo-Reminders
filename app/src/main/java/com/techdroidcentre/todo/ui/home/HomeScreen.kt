@@ -22,6 +22,8 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val toDoListViewState by viewModel.toDoListViewState
+    val scheduledTasksState by viewModel.scheduledTasksState
+    val scheduledTasksForTodayState by viewModel.scheduledTasksForTodayState
     val tabState by viewModel.tabState.collectAsStateWithLifecycle()
     var value by remember { mutableStateOf("") }
     var showNewListDialog by remember { mutableStateOf(false) }
@@ -50,6 +52,8 @@ fun HomeScreen(
             HomeContent(
                 tabState = tabState,
                 todoViewState = toDoListViewState,
+                scheduledTasksState = scheduledTasksState,
+                scheduledTasksForTodayState = scheduledTasksForTodayState,
                 onToDoClick = onToDoClick,
                 onTabSelected = viewModel::switchTab
             )
@@ -61,6 +65,8 @@ fun HomeScreen(
 fun HomeContent(
     tabState: ToDoTabState,
     todoViewState: ToDoListViewState,
+    scheduledTasksState: ScheduledTaskState,
+    scheduledTasksForTodayState: ScheduledTasksForTodayState,
     onToDoClick: (Long, Int) -> Unit,
     onTabSelected: (Int) -> Unit,
     modifier: Modifier = Modifier
@@ -78,10 +84,14 @@ fun HomeContent(
                 )
             }
             1 -> {
-                ScheduledTabContent()
+                ScheduledTabContent(
+                    state = scheduledTasksState
+                )
             }
             2 -> {
-                TodayTabContent()
+                TodayTabContent(
+                    state = scheduledTasksForTodayState
+                )
             }
         }
     }

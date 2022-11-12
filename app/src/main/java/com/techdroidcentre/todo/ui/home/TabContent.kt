@@ -1,20 +1,25 @@
 package com.techdroidcentre.todo.ui.home
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.techdroidcentre.todo.R
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -53,11 +58,89 @@ fun ToDoListTabContent(
 }
 
 @Composable
-fun ScheduledTabContent() {
-    Text(text = "Coming soon")
+fun ScheduledTabContent(
+    state: ScheduledTaskState,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        if (state.isLoading) {
+            CircularProgressIndicator()
+        }
+
+        if (state.tasks.isEmpty()) {
+            EmptyTasksList()
+        } else {
+            LazyColumn(
+                contentPadding = PaddingValues(12.dp),
+                modifier = Modifier.fillMaxSize()
+            ) {
+                state.tasks.forEach { (date, items) ->
+                    item {
+                        Text(
+                            text = date,
+                            modifier = Modifier.fillMaxSize()
+                                .padding(bottom = 8.dp)
+                        )
+                    }
+                    items(items = items) { task ->
+                        ScheduledTask(
+                            task = task,
+                            todoTitle = "ToD0"
+                        )
+                    }
+                }
+            }
+        }
+    }
 }
 
 @Composable
-fun TodayTabContent() {
-    Text(text = "Coming soon")
+fun TodayTabContent(
+    state: ScheduledTasksForTodayState,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        if (state.isLoading) {
+            CircularProgressIndicator()
+        }
+
+        if (state.tasks.isEmpty()) {
+            EmptyTasksList()
+        } else {
+            LazyColumn(
+                contentPadding = PaddingValues(12.dp),
+                modifier = Modifier.fillMaxSize()
+            ) {
+                items(items = state.tasks) { task ->
+                    ScheduledTask(
+                        task = task,
+                        todoTitle = "ToDo"
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun EmptyTasksList(modifier: Modifier = Modifier) {
+    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_baseline_event_available_24),
+            contentDescription = null,
+            modifier = Modifier.size(128.dp)
+        )
+        Text(
+            text="No tasks",
+            fontWeight = FontWeight.Bold,
+            fontSize = MaterialTheme.typography.titleLarge.fontSize,
+            color = Color.Black
+        )
+    }
 }

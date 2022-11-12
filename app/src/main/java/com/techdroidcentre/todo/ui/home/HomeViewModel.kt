@@ -6,10 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.techdroidcentre.todo.data.model.ToDoList
-import com.techdroidcentre.todo.domain.usecases.AddToDoListUseCase
-import com.techdroidcentre.todo.domain.usecases.GetAllToDoListUseCase
-import com.techdroidcentre.todo.domain.usecases.GetToDoListUseCase
-import com.techdroidcentre.todo.domain.usecases.UpdateToDoListUseCase
+import com.techdroidcentre.todo.domain.usecases.*
 import com.techdroidcentre.todo.ui.COLOUR_KEY
 import com.techdroidcentre.todo.ui.TODOLIST_ID_KEY
 import com.techdroidcentre.todo.ui.util.defaultId
@@ -19,6 +16,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 data class ToDoTabState(
@@ -32,10 +31,18 @@ class HomeViewModel @Inject constructor(
     private val addToDoListUseCase: AddToDoListUseCase,
     private val getToDoListUseCase: GetToDoListUseCase,
     private val updateToDoListUseCase: UpdateToDoListUseCase,
+    private val getScheduledTasksUseCase: GetScheduledTasksUseCase,
+    private val getScheduledTasksForTodayUseCase: GetScheduledTasksForTodayUseCase,
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
     private val _toDoListViewState = mutableStateOf(ToDoListViewState())
     val toDoListViewState: State<ToDoListViewState> = _toDoListViewState
+
+    private val _scheduledTasksState = mutableStateOf(ScheduledTaskState())
+    val scheduledTasksState: State<ScheduledTaskState> = _scheduledTasksState
+
+    private val _scheduledTasksForTodayState = mutableStateOf(ScheduledTasksForTodayState())
+    val scheduledTasksForTodayState: State<ScheduledTasksForTodayState> = _scheduledTasksForTodayState
 
     private val todoListId = savedStateHandle.get<Long>(TODOLIST_ID_KEY) ?: defaultId
     val colour = savedStateHandle.get<Int>(COLOUR_KEY)?.also { colour ->
@@ -60,6 +67,8 @@ class HomeViewModel @Inject constructor(
 
     init {
         getAllToDoList()
+        fetchScheduledTasks()
+        fetchScheduledTasksForToday()
     }
 
     private fun getAllToDoList() {
@@ -70,6 +79,39 @@ class HomeViewModel @Inject constructor(
             getAllToDoListUseCase().collect {
                 _toDoListViewState.value = _toDoListViewState.value.copy(
                     todos = it.map { toDoList -> toDoList.toViewState() },
+                    isLoading = false
+                )
+            }
+        }
+    }
+
+    private fun fetchScheduledTasks() {
+        _scheduledTasksState.value = _scheduledTasksState.value.copy(
+            isLoading = true
+        )
+        viewModelScope.launch {
+            getScheduledTasksUseCase().collect {
+                val tasks = it.groupBy { task ->
+                    val dueDate = Date(task.dueDate)
+                    val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.UK)
+                    sdf.format(dueDate)
+                }
+                _scheduledTasksState.value = _scheduledTasksState.value.copy(
+                    tasks = tasks,
+                    isLoading = false
+                )
+            }
+        }
+    }
+
+    private fun fetchScheduledTasksForToday() {
+        _scheduledTasksForTodayState.value = _scheduledTasksForTodayState.value.copy(
+            isLoading = true
+        )
+        viewModelScope.launch {
+            getScheduledTasksForTodayUseCase().collect { tasks ->
+                _scheduledTasksForTodayState.value = _scheduledTasksForTodayState.value.copy(
+                    tasks = tasks,
                     isLoading = false
                 )
             }

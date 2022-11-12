@@ -1,5 +1,6 @@
 package com.techdroidcentre.todo.ui.home
 
+import com.techdroidcentre.todo.data.model.Task
 import com.techdroidcentre.todo.data.model.ToDoList
 
 data class ToDoListViewState(
@@ -22,3 +23,13 @@ fun ToDoList.toViewState(): ToDoState{
         colour = colour
     )
 }
+
+data class ScheduledTaskState(
+    val tasks: Map<String, List<Task>> = emptyMap(),
+    val isLoading: Boolean = false
+)
+
+data class ScheduledTasksForTodayState(
+    val tasks: List<Task> = emptyList(),
+    val isLoading: Boolean = false
+)
