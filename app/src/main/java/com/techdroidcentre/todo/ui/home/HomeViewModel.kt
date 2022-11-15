@@ -12,6 +12,7 @@ import com.techdroidcentre.todo.ui.TODOLIST_ID_KEY
 import com.techdroidcentre.todo.ui.util.Util
 import com.techdroidcentre.todo.ui.util.defaultId
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -31,6 +32,7 @@ class HomeViewModel @Inject constructor(
     private val getToDoListUseCase: GetToDoListUseCase,
     private val updateToDoListUseCase: UpdateToDoListUseCase,
     private val getScheduledTasksUseCase: GetScheduledTasksUseCase,
+    private val getToDoTitleForTaskUseCase: GetToDoTitleForTaskUseCase,
     private val getScheduledTasksForTodayUseCase: GetScheduledTasksForTodayUseCase,
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
@@ -89,8 +91,16 @@ class HomeViewModel @Inject constructor(
             isLoading = true
         )
         viewModelScope.launch {
+            _scheduledTasksState.value = _scheduledTasksState.value.copy(
+                isLoading = true
+            )
+
             getScheduledTasksUseCase().collect {
-                val tasks = it.groupBy { task ->
+                val tasksState = it.map { task ->
+                    val todoTitle = getToDoTitleForTaskUseCase(task.id) ?: "Unknown"
+                    task.toViewState(todoTitle)
+                }
+                val tasks = tasksState.groupBy { task ->
                     Util.toDateString(task.dueDate)
                 }
                 _scheduledTasksState.value = _scheduledTasksState.value.copy(
@@ -106,7 +116,11 @@ class HomeViewModel @Inject constructor(
             isLoading = true
         )
         viewModelScope.launch {
-            getScheduledTasksForTodayUseCase().collect { tasks ->
+            getScheduledTasksForTodayUseCase().collect {
+                val tasks = it.map { task ->
+                    val todoTitle = getToDoTitleForTaskUseCase(task.id) ?: "Unknown"
+                    task.toViewState(todoTitle)
+                }
                 _scheduledTasksForTodayState.value = _scheduledTasksForTodayState.value.copy(
                     tasks = tasks,
                     isLoading = false

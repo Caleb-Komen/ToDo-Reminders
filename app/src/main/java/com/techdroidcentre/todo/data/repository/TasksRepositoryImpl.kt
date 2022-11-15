@@ -2,15 +2,18 @@ package com.techdroidcentre.todo.data.repository
 
 import android.text.format.DateUtils
 import com.techdroidcentre.todo.data.local.TaskDao
+import com.techdroidcentre.todo.data.local.ToDoListDao
 import com.techdroidcentre.todo.data.model.Task
 import com.techdroidcentre.todo.mapper.toDomainModel
 import com.techdroidcentre.todo.mapper.toEntity
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import java.util.*
 import javax.inject.Inject
 
 class TasksRepositoryImpl @Inject constructor(
+    private val todoDao: ToDoListDao,
     private val taskDao: TaskDao
 ): TasksRepository {
     override fun getTasks(toDoListId: Long): Flow<List<Task>> {
@@ -36,6 +39,14 @@ class TasksRepositoryImpl @Inject constructor(
             }.map { entity ->
                 entity.toDomainModel()
             }
+        }
+    }
+
+    override suspend fun getToDoTitleForTask(taskId: Long): String? {
+        return coroutineScope {
+            val taskEntity = async { taskDao.getTask(taskId) }
+            val todoTitle = async { todoDao.getToDoListTitle(taskEntity.await()?.toDoListId!!) }
+            todoTitle.await()
         }
     }
 

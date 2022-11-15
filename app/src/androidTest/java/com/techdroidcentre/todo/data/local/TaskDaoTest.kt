@@ -58,6 +58,13 @@ class TaskDaoTest: BaseTest() {
     }
 
     @Test
+    fun getTask() = runTest {
+        val task = Data.tasks[0]
+        val result = taskDao.getTask(task.id)
+        Truth.assertThat(result).isEqualTo(task)
+    }
+
+    @Test
     fun addTaskAndGetAllTasks_newTaskAddedToDb() = runTest {
         val todo = Data.toDos[0]
         val task = TaskEntity(

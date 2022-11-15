@@ -10,6 +10,8 @@ interface TasksRepository {
 
     fun getScheduledTasksForToday(): Flow<List<Task>>
 
+    suspend fun getToDoTitleForTask(taskId: Long): String?
+
     suspend fun addTask(todoListId: Long,task: Task)
 
     suspend fun deleteTask(id: Long)

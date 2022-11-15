@@ -17,20 +17,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.techdroidcentre.todo.data.model.Task
 import com.techdroidcentre.todo.data.util.Priority
 
 @Composable
 fun ScheduledTask(
-    task: Task,
-    todoTitle: String,
+    task: TaskState,
     modifier: Modifier = Modifier
 ) {
     var taskExpanded by remember { mutableStateOf(false) }
 
     ScheduledTask(
         task = task,
-        todoTitle = todoTitle,
         taskExpanded = taskExpanded,
         expandTask = { taskExpanded = !taskExpanded },
         modifier = modifier
@@ -40,8 +37,7 @@ fun ScheduledTask(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScheduledTask(
-    task: Task,
-    todoTitle: String,
+    task: TaskState,
     taskExpanded: Boolean,
     expandTask: () -> Unit,
     modifier: Modifier = Modifier
@@ -61,7 +57,6 @@ fun ScheduledTask(
         ) {
             ScheduledTaskHeader(
                 task = task,
-                todoTitle = todoTitle,
                 taskExpanded = taskExpanded,
                 expandTask = expandTask
             )
@@ -75,8 +70,7 @@ fun ScheduledTask(
 
 @Composable
 fun ScheduledTaskHeader(
-    task: Task,
-    todoTitle: String,
+    task: TaskState,
     taskExpanded: Boolean,
     expandTask: () -> Unit,
     modifier: Modifier = Modifier
@@ -87,11 +81,11 @@ fun ScheduledTaskHeader(
     ) {
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = task.title,
+                text = task.taskTitle,
                 style = MaterialTheme.typography.titleMedium
             )
             Text(
-                text = "($todoTitle)",
+                text = "(${task.todoTitle})",
                 style = MaterialTheme.typography.titleSmall,
                 fontStyle = FontStyle.Italic,
                 modifier = Modifier
@@ -114,7 +108,7 @@ fun ScheduledTaskHeader(
 
 @Composable
 fun ScheduledTaskBody(
-    task: Task,
+    task: TaskState,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
@@ -143,8 +137,7 @@ fun ScheduledTaskBody(
 @Composable
 fun ScheduledTaskPreview() {
     ScheduledTask(
-        task = Task(1, "Task title", "Task Content", System.currentTimeMillis(), Priority.NONE, false),
-        todoTitle = "ToDo",
+        task = TaskState(1, "Task title", "ToDo title", "Task Content", System.currentTimeMillis(), Priority.NONE, false),
         taskExpanded = true,
         expandTask = {}
     )

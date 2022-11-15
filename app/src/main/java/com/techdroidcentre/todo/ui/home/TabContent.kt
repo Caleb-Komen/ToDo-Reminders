@@ -97,10 +97,7 @@ fun ScheduledTabContent(
                         )
                     }
                     items(items = items) { task ->
-                        ScheduledTask(
-                            task = task,
-                            todoTitle = "ToDo"
-                        )
+                        ScheduledTask(task = task)
                     }
                     item {
                         Spacer(modifier = Modifier.height(4.dp))
@@ -133,10 +130,7 @@ fun TodayTabContent(
                 modifier = Modifier.fillMaxSize()
             ) {
                 items(items = state.tasks) { task ->
-                    ScheduledTask(
-                        task = task,
-                        todoTitle = "ToDo"
-                    )
+                    ScheduledTask(task = task)
                 }
             }
         }
