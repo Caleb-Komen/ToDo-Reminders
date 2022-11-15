@@ -17,7 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.techdroidcentre.todo.ui.components.CalendarViewDialog
+import com.techdroidcentre.todo.ui.components.DateAndTimePicker
 import com.techdroidcentre.todo.ui.theme.ToDoTheme
 import com.techdroidcentre.todo.ui.util.Util
 
@@ -30,7 +30,7 @@ fun TaskBodySection(
     onContentFocusChanged: (FocusState) -> Unit,
     priority: String,
     date: Long,
-    onDateChange: (Long) -> Unit,
+    onDateAndTimeSet: (Long) -> Unit,
     dropDownExpanded: Boolean,
     onDismissRequest: () -> Unit,
     onDropDownMenuClick: () -> Unit,
@@ -52,7 +52,7 @@ fun TaskBodySection(
                 onDropDownMenuItemSelected = onDropDownMenuItemSelected
             )
             Spacer(modifier = Modifier.width(8.dp))
-            DateAndTime(date = date, onDateChange = onDateChange)
+            DateAndTime(date = date, onDateAndTimeSet = onDateAndTimeSet)
         }
         Spacer(modifier = Modifier.height(8.dp))
         TaskContentTextField(
@@ -162,7 +162,7 @@ fun PriorityDropDownMenu(
 @Composable
 fun DateAndTime(
     date: Long,
-    onDateChange: (Long) -> Unit,
+    onDateAndTimeSet: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var openDatePicker by remember { mutableStateOf(false) }
@@ -192,10 +192,9 @@ fun DateAndTime(
     }
 
     if (openDatePicker) {
-        CalendarViewDialog(
+        DateAndTimePicker(
             date = date,
-            onDateChange = onDateChange,
-            closeDialog = { openDatePicker = false }
+            onDateAndTimeSet = onDateAndTimeSet
         )
     }
 }

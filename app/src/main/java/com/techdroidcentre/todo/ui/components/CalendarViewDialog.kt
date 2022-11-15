@@ -1,78 +1,47 @@
 package com.techdroidcentre.todo.ui.components
 
-import android.widget.CalendarView
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
+import android.content.Context
 import androidx.appcompat.view.ContextThemeWrapper
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.platform.LocalContext
 import java.util.*
 
 @Composable
-fun CalendarViewDialog(
+fun DateAndTimePicker(
     date: Long,
-    onDateChange: (Long) -> Unit,
-    closeDialog: () -> Unit,
-    modifier: Modifier = Modifier
+    onDateAndTimeSet: (Long) -> Unit,
+    context: Context = LocalContext.current
 ) {
-    AlertDialog(
-        title = {
-            Text(text = "Choose date")
-        },
-        text = {
-            CalendarView(date = date, onDateChange = onDateChange)
-        },
-        onDismissRequest = closeDialog,
-        confirmButton = {
-            Button(
-                onClick = closeDialog
-            ) {
-                Text(text = "Done")
-            }
-        },
-        dismissButton = {
-            Button(
-                onClick = {
-                    onDateChange(0L)
-                    closeDialog()
-                }
-            ) {
-                Text(text = "None")
-            }
-        },
-        modifier = modifier
-    )
+    val startYear: Int
+    val startMonth: Int
+    val startDay: Int
+    val startHour: Int
+    val startMinute: Int
+    if (date > 0) {
+        val currentDateTime = Calendar.getInstance()
+        currentDateTime.timeInMillis = date
+        startYear = currentDateTime.get(Calendar.YEAR)
+        startMonth = currentDateTime.get(Calendar.MONTH)
+        startDay = currentDateTime.get(Calendar.DAY_OF_MONTH)
+        startHour = currentDateTime.get(Calendar.HOUR_OF_DAY)
+        startMinute = currentDateTime.get(Calendar.MINUTE)
+    } else {
+        val currentDateTime = Calendar.getInstance()
+        startYear = currentDateTime.get(Calendar.YEAR)
+        startMonth = currentDateTime.get(Calendar.MONTH)
+        startDay = currentDateTime.get(Calendar.DAY_OF_MONTH)
+        startHour = currentDateTime.get(Calendar.HOUR_OF_DAY)
+        startMinute = currentDateTime.get(Calendar.MINUTE)
+    }
+
+    DatePickerDialog(ContextThemeWrapper(context, android.R.style.Widget_Material_DatePicker), { _, year, month, day ->
+        TimePickerDialog(ContextThemeWrapper(context, android.R.style.Widget_Material_TimePicker), { _, hour, minute ->
+            val dateTime = Calendar.getInstance()
+            dateTime.set(year, month, day, hour, minute)
+            onDateAndTimeSet(dateTime.timeInMillis)
+        }, startHour, startMinute, true).show()
+    }, startYear, startMonth, startDay).show()
 }
 
-@Composable
-fun CalendarView(
-    date: Long,
-    onDateChange: (Long) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    AndroidView(
-        modifier = modifier,
-        factory = { context ->
-            CalendarView(ContextThemeWrapper(context, android.R.style.Widget_Material_DatePicker))
-        },
-        update = { calendarView ->
-            calendarView.apply {
-                if (date > 0L) setDate(date) else setDate(Calendar.getInstance().timeInMillis)
-
-                setOnDateChangeListener { _, year, month, dayOfMonth ->
-                    val calendar = GregorianCalendar(year, month, dayOfMonth)
-                    onDateChange(calendar.timeInMillis)
-                }
-            }
-        }
-    )
-}
-
-@Preview
-@Composable
-fun CalendarDialogPreview() {
-    CalendarViewDialog(0L, {}, {})
-}

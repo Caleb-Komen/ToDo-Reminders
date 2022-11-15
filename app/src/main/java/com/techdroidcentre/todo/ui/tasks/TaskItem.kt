@@ -1,5 +1,6 @@
 package com.techdroidcentre.todo.ui.tasks
 
+import android.content.Context
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -39,6 +40,7 @@ fun TaskItem(
     val originalContent = task.content
     val originalPriority = task.priority.name
     val originalDueDate = task.dueDate
+    val context = LocalContext.current
 
     var title by remember { mutableStateOf(task.title) }
     var content by remember { mutableStateOf(task.content) }
@@ -58,7 +60,7 @@ fun TaskItem(
         saveTask(Task(task.id, title, content, dueDate, Priority.valueOf(priority), isComplete))
     }
 
-    if (dueDate != 0L) {
+    fun scheduleNotification (context: Context, dueDate: Long) {
         val calendar = Calendar.getInstance()
         calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(
             Calendar.DATE))
@@ -68,9 +70,9 @@ fun TaskItem(
             .setInputData(workDataOf(KEY_TASK_TITLE to title))
             .build()
         if (duration > 0L) {
-            WorkManager.getInstance(LocalContext.current).enqueue(workRequest)
+            WorkManager.getInstance(context).enqueue(workRequest)
         } else {
-            WorkManager.getInstance(LocalContext.current).cancelWorkById(workRequest.id)
+            WorkManager.getInstance(context).cancelWorkById(workRequest.id)
         }
     }
 
@@ -90,7 +92,10 @@ fun TaskItem(
         dropDownExpanded = dropDownExpanded,
         priority = priority,
         date = dueDate,
-        onDateChange = { dueDate = it },
+        onDateAndTimeSet = {
+            dueDate = it
+            scheduleNotification(context, it)
+        },
         onDismissRequest = { dropDownExpanded = false },
         onDropDownMenuClick = { dropDownExpanded = true },
         onDropDownMenuItemSelected = {
@@ -119,7 +124,7 @@ fun TaskItem(
     dropDownExpanded: Boolean,
     priority: String,
     date: Long,
-    onDateChange: (Long) -> Unit,
+    onDateAndTimeSet: (Long) -> Unit,
     onDismissRequest: () -> Unit,
     onDropDownMenuClick: () -> Unit,
     onDropDownMenuItemSelected: (String) -> Unit,
@@ -159,7 +164,7 @@ fun TaskItem(
                     onContentFocusChanged = onContentFocusChanged,
                     priority = priority,
                     date = date,
-                    onDateChange = onDateChange,
+                    onDateAndTimeSet = onDateAndTimeSet,
                     dropDownExpanded = dropDownExpanded,
                     onDismissRequest = onDismissRequest,
                     onDropDownMenuClick = onDropDownMenuClick,
@@ -192,7 +197,7 @@ fun TaskItemPreview() {
             dropDownExpanded = true,
             priority = "None",
             date = 0L,
-            onDateChange = {},
+            onDateAndTimeSet = {},
             onDismissRequest = {},
             onDropDownMenuClick = {},
             onDropDownMenuItemSelected = {},
