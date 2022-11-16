@@ -34,6 +34,7 @@ class HomeViewModel @Inject constructor(
     private val getScheduledTasksUseCase: GetScheduledTasksUseCase,
     private val getToDoTitleForTaskUseCase: GetToDoTitleForTaskUseCase,
     private val getScheduledTasksForTodayUseCase: GetScheduledTasksForTodayUseCase,
+    private val deleteToDoListUseCase: DeleteToDoListUseCase,
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
     private val _toDoListViewState = mutableStateOf(ToDoListViewState())
@@ -140,6 +141,23 @@ class HomeViewModel @Inject constructor(
             _tabState.update {
                 it.copy(currentIndex = newIndex)
             }
+        }
+    }
+
+    fun updateToDoList(id: Long, title: String) {
+        viewModelScope.launch {
+            getToDoListUseCase(id).collect { todoList ->
+                val todo = todoList ?: return@collect
+                if (todo.title != title) {
+                    updateToDoListUseCase(todo.copy(title = title))
+                }
+            }
+        }
+    }
+
+    fun deleteToDoList(id: Long) {
+        viewModelScope.launch {
+            deleteToDoListUseCase(id)
         }
     }
 }

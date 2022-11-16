@@ -29,6 +29,7 @@ import java.util.*
 fun ToDoListTabContent(
     viewState: ToDoListViewState,
     onClick: (Long, Int) -> Unit,
+    showPopUp: (Long, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -52,7 +53,8 @@ fun ToDoListTabContent(
                 items(items = viewState.todos) { todoState ->
                     ToDoListItem(
                         toDoState = todoState,
-                        onClick = onClick
+                        onClick = onClick,
+                        showPopUp = showPopUp
                     )
                 }
             }

@@ -1,9 +1,10 @@
 package com.techdroidcentre.todo.ui.home
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -14,18 +15,23 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+@OptIn(ExperimentalFoundationApi::class)
 @ExperimentalMaterial3Api
 @Composable
 fun ToDoListItem(
     toDoState: ToDoState,
     onClick: (Long, Int) -> Unit,
+    showPopUp: (Long, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier
-            .fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color(toDoState.colour)),
-        onClick = { onClick(toDoState.id, toDoState.colour) }
+            .fillMaxWidth()
+            .combinedClickable(
+                onLongClick = { showPopUp(toDoState.id, toDoState.title) },
+                onClick = { onClick(toDoState.id, toDoState.colour) }
+            ),
+        colors = CardDefaults.cardColors(containerColor = Color(toDoState.colour))
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -99,6 +105,7 @@ fun ToDoListItemPreview() {
             List(5) { "Task $it" },
             Color(0xFF2367AB).toArgb()
         ),
-        {_,_ -> }
+        {_,_ -> },
+        {_, _ ->}
     )
 }

@@ -10,9 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.techdroidcentre.todo.ui.components.NewToDoListDialog
-import com.techdroidcentre.todo.ui.components.ToDoTabRow
-import com.techdroidcentre.todo.ui.components.TopBar
+import com.techdroidcentre.todo.ui.components.*
 
 @OptIn(ExperimentalLifecycleComposeApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -27,12 +25,40 @@ fun HomeScreen(
     val tabState by viewModel.tabState.collectAsStateWithLifecycle()
     var value by remember { mutableStateOf("") }
     var showNewListDialog by remember { mutableStateOf(false) }
+    var displayPopUp by remember { mutableStateOf(false) }
+    var todoId by remember { mutableStateOf(0L) }
+    var todoTitle by remember { mutableStateOf("") }
+    var showEditToDoTitleDialog by remember { mutableStateOf(false) }
+    var newTodoTitle by remember { mutableStateOf("") }
 
     if (showNewListDialog) {
         NewToDoListDialog(
             value = value,
             onValueChange = { value = it },
             dismissDialog = { showNewListDialog = false }
+        )
+    }
+
+    if (displayPopUp) {
+        ToDoListPopUp(
+            id = todoId,
+            title = todoTitle,
+            closePopUp = { displayPopUp = false },
+            showEditTitleDialog = { _, title ->
+                newTodoTitle = title
+                showEditToDoTitleDialog = true
+            },
+            deleteToDo = viewModel::deleteToDoList
+        )
+    }
+
+    if (showEditToDoTitleDialog) {
+        EditToDoTitleDialog(
+            id = todoId,
+            title = newTodoTitle,
+            onTitleChange = { newTodoTitle = it},
+            dismissDialog = { showEditToDoTitleDialog = false },
+            updateToDoList = viewModel::updateToDoList
         )
     }
 
@@ -55,7 +81,12 @@ fun HomeScreen(
                 scheduledTasksState = scheduledTasksState,
                 scheduledTasksForTodayState = scheduledTasksForTodayState,
                 onToDoClick = onToDoClick,
-                onTabSelected = viewModel::switchTab
+                onTabSelected = viewModel::switchTab,
+                showPopUp = { id, title ->
+                    displayPopUp = true
+                    todoId = id
+                    todoTitle = title
+                }
             )
         }
     }
@@ -69,6 +100,7 @@ fun HomeContent(
     scheduledTasksForTodayState: ScheduledTasksForTodayState,
     onToDoClick: (Long, Int) -> Unit,
     onTabSelected: (Int) -> Unit,
+    showPopUp: (Long, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
@@ -80,7 +112,8 @@ fun HomeContent(
             0 -> {
                 ToDoListTabContent(
                     viewState = todoViewState,
-                    onClick = onToDoClick
+                    onClick = onToDoClick,
+                    showPopUp = showPopUp
                 )
             }
             1 -> {
