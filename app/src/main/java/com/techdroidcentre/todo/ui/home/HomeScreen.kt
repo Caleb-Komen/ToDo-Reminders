@@ -25,7 +25,7 @@ fun HomeScreen(
     val tabState by viewModel.tabState.collectAsStateWithLifecycle()
     var value by remember { mutableStateOf("") }
     var showNewListDialog by remember { mutableStateOf(false) }
-    var displayPopUp by remember { mutableStateOf(false) }
+    var displayToDoActionDialog by remember { mutableStateOf(false) }
     var todoId by remember { mutableStateOf(0L) }
     var todoTitle by remember { mutableStateOf("") }
     var showEditToDoTitleDialog by remember { mutableStateOf(false) }
@@ -39,11 +39,11 @@ fun HomeScreen(
         )
     }
 
-    if (displayPopUp) {
-        ToDoListPopUp(
+    if (displayToDoActionDialog) {
+        ToDoActionDialog(
             id = todoId,
             title = todoTitle,
-            closePopUp = { displayPopUp = false },
+            closeDialog = { displayToDoActionDialog = false },
             showEditTitleDialog = { _, title ->
                 newTodoTitle = title
                 showEditToDoTitleDialog = true
@@ -82,8 +82,8 @@ fun HomeScreen(
                 scheduledTasksForTodayState = scheduledTasksForTodayState,
                 onToDoClick = onToDoClick,
                 onTabSelected = viewModel::switchTab,
-                showPopUp = { id, title ->
-                    displayPopUp = true
+                showDialog = { id, title ->
+                    displayToDoActionDialog = true
                     todoId = id
                     todoTitle = title
                 }
@@ -100,7 +100,7 @@ fun HomeContent(
     scheduledTasksForTodayState: ScheduledTasksForTodayState,
     onToDoClick: (Long, Int) -> Unit,
     onTabSelected: (Int) -> Unit,
-    showPopUp: (Long, String) -> Unit,
+    showDialog: (Long, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
@@ -113,7 +113,7 @@ fun HomeContent(
                 ToDoListTabContent(
                     viewState = todoViewState,
                     onClick = onToDoClick,
-                    showPopUp = showPopUp
+                    showDialog = showDialog
                 )
             }
             1 -> {

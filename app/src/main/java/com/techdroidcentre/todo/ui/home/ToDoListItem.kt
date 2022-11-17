@@ -21,14 +21,14 @@ import androidx.compose.ui.unit.dp
 fun ToDoListItem(
     toDoState: ToDoState,
     onClick: (Long, Int) -> Unit,
-    showPopUp: (Long, String) -> Unit,
+    showDialog: (Long, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
             .combinedClickable(
-                onLongClick = { showPopUp(toDoState.id, toDoState.title) },
+                onLongClick = { showDialog(toDoState.id, toDoState.title) },
                 onClick = { onClick(toDoState.id, toDoState.colour) }
             ),
         colors = CardDefaults.cardColors(containerColor = Color(toDoState.colour))
