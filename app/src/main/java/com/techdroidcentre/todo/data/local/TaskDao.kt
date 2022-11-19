@@ -9,12 +9,6 @@ interface TaskDao {
     @Query("SELECT * FROM tasks WHERE todo_list_id = :toDoListId")
     fun getTasks(toDoListId: Long): Flow<List<TaskEntity>>
 
-    @Query("SELECT * FROM tasks WHERE id = :id")
-    suspend fun getTask(id: Long): TaskEntity?
-
-    @Query("SELECT * FROM tasks WHERE due_date != 0")
-    fun getScheduledTasks(): Flow<List<TaskEntity>>
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addTask(task: TaskEntity)
 

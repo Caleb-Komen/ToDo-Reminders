@@ -49,13 +49,6 @@ class ToDoListDaoTest: BaseTest() {
     }
 
     @Test
-    fun getToDoListTitle() = runTest {
-        val todo = Data.toDos[0]
-        val result = toDoListDao.getToDoListTitle(todo.id)
-        Truth.assertThat(result).isEqualTo(todo.title)
-    }
-
-    @Test
     fun addToDoList_toDoListAddedToDb() = runTest {
         val todoList = ToDoListEntity(
             3L,

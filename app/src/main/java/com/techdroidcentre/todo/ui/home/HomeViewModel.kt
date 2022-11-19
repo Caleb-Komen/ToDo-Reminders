@@ -1,5 +1,6 @@
 package com.techdroidcentre.todo.ui.home
 
+import android.text.format.DateUtils
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -12,7 +13,6 @@ import com.techdroidcentre.todo.ui.TODOLIST_ID_KEY
 import com.techdroidcentre.todo.ui.util.Util
 import com.techdroidcentre.todo.ui.util.defaultId
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -31,9 +31,6 @@ class HomeViewModel @Inject constructor(
     private val addToDoListUseCase: AddToDoListUseCase,
     private val getToDoListUseCase: GetToDoListUseCase,
     private val updateToDoListUseCase: UpdateToDoListUseCase,
-    private val getScheduledTasksUseCase: GetScheduledTasksUseCase,
-    private val getToDoTitleForTaskUseCase: GetToDoTitleForTaskUseCase,
-    private val getScheduledTasksForTodayUseCase: GetScheduledTasksForTodayUseCase,
     private val deleteToDoListUseCase: DeleteToDoListUseCase,
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
@@ -92,17 +89,19 @@ class HomeViewModel @Inject constructor(
             isLoading = true
         )
         viewModelScope.launch {
-            _scheduledTasksState.value = _scheduledTasksState.value.copy(
-                isLoading = true
-            )
-
-            getScheduledTasksUseCase().collect {
-                val tasksState = it.map { task ->
-                    val todoTitle = getToDoTitleForTaskUseCase(task.id) ?: "Unknown"
-                    task.toViewState(todoTitle)
+            getAllToDoListUseCase().collect {
+                val todos = it.filter { todo ->
+                    todo.tasks.filter { task -> task.dueDate != 0L }.isNotEmpty()
                 }
-                val tasks = tasksState.groupBy { task ->
-                    Util.toDateString(task.dueDate)
+                val tasks = mutableMapOf<String, List<TaskState>>()
+                todos.forEach { todo ->
+                    val tasksState = todo.tasks.map { task ->
+                        task.toViewState(todo.title)
+                    }
+                    val state = tasksState.groupBy { task ->
+                        Util.toDateString(task.dueDate)
+                    }
+                    tasks += state
                 }
                 _scheduledTasksState.value = _scheduledTasksState.value.copy(
                     tasks = tasks,
@@ -117,10 +116,19 @@ class HomeViewModel @Inject constructor(
             isLoading = true
         )
         viewModelScope.launch {
-            getScheduledTasksForTodayUseCase().collect {
-                val tasks = it.map { task ->
-                    val todoTitle = getToDoTitleForTaskUseCase(task.id) ?: "Unknown"
-                    task.toViewState(todoTitle)
+            getAllToDoListUseCase().collect {
+                val todos = it.filter { todo ->
+                    todo.tasks.filter { task ->
+                        task.dueDate != 0L && DateUtils.isToday(task.dueDate)
+                    }.isNotEmpty()
+                }
+                val tasks = mutableListOf<TaskState>()
+                todos.forEach { todo ->
+                    val tasksState = todo.tasks.map { task ->
+                        task.toViewState(todo.title)
+                    }
+
+                    tasks += tasksState
                 }
                 _scheduledTasksForTodayState.value = _scheduledTasksForTodayState.value.copy(
                     tasks = tasks,

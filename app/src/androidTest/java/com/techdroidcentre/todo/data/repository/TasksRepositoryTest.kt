@@ -32,7 +32,7 @@ class TasksRepositoryTest: BaseTest() {
     @Before
     fun setup() = runBlocking {
         repository = ToDoListRepositoryImpl(database.toDoListDao)
-        tasksRepository = TasksRepositoryImpl(database.toDoListDao, database.taskDao)
+        tasksRepository = TasksRepositoryImpl(database.taskDao)
         // add todos to the parent table first to prevent the mistake of...
         // ...adding tasks first to the child table with an empty parent table
         todos.forEach {
@@ -46,25 +46,6 @@ class TasksRepositoryTest: BaseTest() {
     fun getTasks() = runTest {
         val result = tasksRepository.getTasks(1L).first()
         Truth.assertThat(result).containsAnyIn(tasks)
-    }
-
-    @Test
-    fun getScheduledTasks() = runTest {
-        val result = tasksRepository.getScheduledTasks().first()
-        Truth.assertThat(result.size).isEqualTo(2)
-    }
-
-    @Test
-    fun getScheduledTasksForToday() = runTest {
-        val result = tasksRepository.getScheduledTasksForToday().first()
-        Truth.assertThat(result.size).isEqualTo(1)
-    }
-
-    @Test
-    fun getToDoTitleForTask() = runTest {
-        val task = tasks[0]
-        val title = tasksRepository.getToDoTitleForTask(task.id)
-        Truth.assertThat(title).isEqualTo("Test and Debug")
     }
 
     @Test

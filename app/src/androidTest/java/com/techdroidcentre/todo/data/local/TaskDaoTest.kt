@@ -51,20 +51,6 @@ class TaskDaoTest: BaseTest() {
     }
 
     @Test
-    fun getScheduledTasks() = runTest {
-        val tasks = taskDao.getScheduledTasks().first()
-        // We have one scheduled task in the db
-        Truth.assertThat(tasks.size).isEqualTo(1)
-    }
-
-    @Test
-    fun getTask() = runTest {
-        val task = Data.tasks[0]
-        val result = taskDao.getTask(task.id)
-        Truth.assertThat(result).isEqualTo(task)
-    }
-
-    @Test
     fun addTaskAndGetAllTasks_newTaskAddedToDb() = runTest {
         val todo = Data.toDos[0]
         val task = TaskEntity(

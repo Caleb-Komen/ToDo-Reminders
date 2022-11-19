@@ -6,11 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface TasksRepository {
     fun getTasks(toDoListId: Long): Flow<List<Task>>
 
-    fun getScheduledTasks(): Flow<List<Task>>
-
-    fun getScheduledTasksForToday(): Flow<List<Task>>
-
-    suspend fun getToDoTitleForTask(taskId: Long): String?
+//    suspend fun getToDoTitleForTask(taskId: Long): String?
 
     suspend fun addTask(todoListId: Long,task: Task)
 
