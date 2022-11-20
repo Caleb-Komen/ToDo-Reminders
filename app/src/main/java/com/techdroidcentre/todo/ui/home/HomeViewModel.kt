@@ -89,13 +89,12 @@ class HomeViewModel @Inject constructor(
             isLoading = true
         )
         viewModelScope.launch {
-            getAllToDoListUseCase().collect {
-                val todos = it.filter { todo ->
-                    todo.tasks.filter { task -> task.dueDate != 0L }.isNotEmpty()
-                }
+            getAllToDoListUseCase().collect { todos ->
                 val tasks = mutableMapOf<String, List<TaskState>>()
                 todos.forEach { todo ->
-                    val tasksState = todo.tasks.map { task ->
+                    val tasksState = todo.tasks.filter { task ->
+                        task.dueDate != 0L
+                    }.map { task ->
                         task.toViewState(todo.title)
                     }
                     val state = tasksState.groupBy { task ->
@@ -116,15 +115,12 @@ class HomeViewModel @Inject constructor(
             isLoading = true
         )
         viewModelScope.launch {
-            getAllToDoListUseCase().collect {
-                val todos = it.filter { todo ->
-                    todo.tasks.filter { task ->
-                        task.dueDate != 0L && DateUtils.isToday(task.dueDate)
-                    }.isNotEmpty()
-                }
+            getAllToDoListUseCase().collect { todos ->
                 val tasks = mutableListOf<TaskState>()
                 todos.forEach { todo ->
-                    val tasksState = todo.tasks.map { task ->
+                    val tasksState = todo.tasks.filter { task ->
+                        task.dueDate != 0L && DateUtils.isToday(task.dueDate)
+                    }.map { task ->
                         task.toViewState(todo.title)
                     }
 
