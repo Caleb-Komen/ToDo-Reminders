@@ -30,6 +30,7 @@ fun HomeScreen(
     var todoTitle by remember { mutableStateOf("") }
     var showEditToDoTitleDialog by remember { mutableStateOf(false) }
     var newTodoTitle by remember { mutableStateOf("") }
+    var showConfirmDeleteDialog by remember { mutableStateOf(false) }
 
     if (showNewListDialog) {
         NewToDoListDialog(
@@ -48,7 +49,9 @@ fun HomeScreen(
                 newTodoTitle = title
                 showEditToDoTitleDialog = true
             },
-            deleteToDo = viewModel::deleteToDoList
+            showConfirmDeleteDialog = {
+                showConfirmDeleteDialog = true
+            }
         )
     }
 
@@ -59,6 +62,14 @@ fun HomeScreen(
             onTitleChange = { newTodoTitle = it},
             dismissDialog = { showEditToDoTitleDialog = false },
             updateToDoList = viewModel::updateToDoList
+        )
+    }
+
+    if (showConfirmDeleteDialog) {
+        ConfirmDeleteDialog(
+            id = todoId,
+            dismissDialog = { showConfirmDeleteDialog = false },
+            deleteToDo = viewModel::deleteToDoList
         )
     }
 
