@@ -36,6 +36,7 @@ fun TasksScreen(
 ) {
     val viewModel: TasksViewModel = hiltViewModel()
     var showColourPickerDialog by remember { mutableStateOf(false) }
+    var isBackPressed by remember { mutableStateOf(false) }
 
     if (showColourPickerDialog) {
         ColourPicker(
@@ -59,11 +60,13 @@ fun TasksScreen(
     ) {
         TasksScreen(
             snackbarHostState = snackbarHostState,
-            modifier = modifier.padding(it),
-            viewModel = viewModel
+            viewModel = viewModel,
+            isBackPressed = isBackPressed,
+            modifier = modifier.padding(it)
         )
     }
     BackHandler {
+        isBackPressed = true
         navController.navigate(
             Screen.HomeScreen.passIdAndColour(
                 viewModel.todoListId,
@@ -81,8 +84,9 @@ fun TasksScreen(
 @Composable
 fun TasksScreen(
     snackbarHostState: SnackbarHostState,
-    modifier: Modifier = Modifier,
-    viewModel: TasksViewModel
+    viewModel: TasksViewModel,
+    isBackPressed: Boolean,
+    modifier: Modifier = Modifier
 ) {
     val tasks = viewModel.uiState.value.tasks
     val colour = viewModel.uiState.value.colour
@@ -98,6 +102,7 @@ fun TasksScreen(
         items(items = tasks, key = { task -> task.id }) { task ->
             TaskItem(
                 task = task,
+                isBackPressed = isBackPressed,
                 saveTask = { viewModel.addTask(it) },
                 deleteTask = {
                     viewModel.deleteTask(it.id)

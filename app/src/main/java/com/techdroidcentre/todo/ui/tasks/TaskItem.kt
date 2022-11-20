@@ -33,6 +33,7 @@ import java.util.concurrent.TimeUnit
 @Composable
 fun TaskItem(
     task: TaskState,
+    isBackPressed: Boolean,
     saveTask: (task:Task) -> Unit,
     deleteTask: (task: Task) -> Unit
 ) {
@@ -51,6 +52,11 @@ fun TaskItem(
     var isContentFocused by remember { mutableStateOf(false) }
     var taskExpanded by remember { mutableStateOf(false) }
     var dropDownExpanded by remember { mutableStateOf(false) }
+
+    if (isBackPressed) {
+        isTitleFocused = false
+        isContentFocused = false
+    }
 
     if ((!isTitleFocused && originalTitle != title)
         || (!isContentFocused && originalContent != content)
