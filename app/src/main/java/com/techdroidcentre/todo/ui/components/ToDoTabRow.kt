@@ -27,7 +27,7 @@ fun ToDoTabRow(
         indicator = {
             TabRowDefaults.Indicator(color = Color.Transparent)
         },
-        contentColor = Color.Black,
+        contentColor = MaterialTheme.colorScheme.onSurface,
         divider = { Divider(thickness = 0.dp) },
         modifier = modifier
             .height(56.dp)
