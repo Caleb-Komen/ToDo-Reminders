@@ -41,6 +41,7 @@ fun TaskItem(
     val originalContent = task.content
     val originalPriority = task.priority.name
     val originalDueDate = task.dueDate
+    val completed = task.isComplete
     val context = LocalContext.current
 
     var title by remember { mutableStateOf(task.title) }
@@ -61,8 +62,8 @@ fun TaskItem(
     if ((!isTitleFocused && originalTitle != title)
         || (!isContentFocused && originalContent != content)
         || originalPriority != priority
-        || originalDueDate != dueDate) {
-
+        || originalDueDate != dueDate
+        || completed != isComplete) {
         saveTask(Task(task.id, title, content, dueDate, Priority.valueOf(priority), isComplete))
     }
 
@@ -87,8 +88,8 @@ fun TaskItem(
         content = content,
         onTitleChange = { title = it },
         onContentChange = { content = it},
-        checked = isComplete,
-        onCheckedChange = { isComplete = it },
+        completed = isComplete,
+        onCompletedChange = { isComplete = it },
         isTitleFocused = isTitleFocused,
         isContentFocused = isContentFocused,
         onTitleFocusChanged = { isTitleFocused = it.isFocused },
@@ -119,8 +120,8 @@ fun TaskItem(
     content: String,
     onTitleChange: (String) -> Unit,
     onContentChange: (String) -> Unit,
-    checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
+    completed: Boolean,
+    onCompletedChange: (Boolean) -> Unit,
     isTitleFocused: Boolean,
     isContentFocused: Boolean,
     onTitleFocusChanged: (FocusState) -> Unit,
@@ -155,8 +156,8 @@ fun TaskItem(
             TaskHeaderSection(
                 title = title,
                 onTitleChange = onTitleChange,
-                checked = checked,
-                onCheckedChange = onCheckedChange,
+                completed = completed,
+                onCompletedChange = onCompletedChange,
                 isTitleFocused = isTitleFocused,
                 onTitleFocusChanged = onTitleFocusChanged,
                 taskExpanded = taskExpanded,
@@ -192,8 +193,8 @@ fun TaskItemPreview() {
             content = "Finish compose codelab",
             onTitleChange = {},
             onContentChange = {},
-            checked = false,
-            onCheckedChange = {},
+            completed = false,
+            onCompletedChange = {},
             isTitleFocused = false,
             isContentFocused = false,
             onTitleFocusChanged = {},

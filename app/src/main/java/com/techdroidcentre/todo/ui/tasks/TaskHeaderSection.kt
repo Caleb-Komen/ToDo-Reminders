@@ -19,6 +19,7 @@ import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.techdroidcentre.todo.ui.theme.ToDoTheme
@@ -28,8 +29,8 @@ import com.techdroidcentre.todo.ui.theme.ToDoTheme
 fun TaskHeaderSection(
     title: String,
     onTitleChange: (String) -> Unit,
-    checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
+    completed: Boolean,
+    onCompletedChange: (Boolean) -> Unit,
     isTitleFocused: Boolean,
     onTitleFocusChanged: (FocusState) -> Unit,
     taskExpanded: Boolean,
@@ -41,28 +42,22 @@ fun TaskHeaderSection(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(imageVector = Icons.Default.Menu, contentDescription = null, modifier = Modifier.size(16.dp))
-        Checkbox(checked = checked, onCheckedChange = onCheckedChange)
-        TaskTitleTextField(
-            value = title,
-            onValueChange = onTitleChange,
-            isFocused = isTitleFocused,
-            onFocusChanged = onTitleFocusChanged,
-            modifier = Modifier.weight(1f)
-                .drawBehind {
-                    val lineSize = size.copy(height = 1f)
-                    if (checked) drawLine(
-                        Color.Black,
-                        Offset(
-                            x = (size.width - lineSize.width) / 2f,
-                            y = (size.height - lineSize.height) / 2f
-                        ),
-                        Offset(
-                            x = size.width,
-                            y = size.height / 2f
-                        )
-                    )
-                }
-        )
+        Checkbox(checked = completed, onCheckedChange = onCompletedChange)
+        if (completed) {
+            Text(
+                text = title,
+                textDecoration = TextDecoration.LineThrough,
+                modifier = Modifier.weight(1f)
+            )
+        } else {
+            TaskTitleTextField(
+                value = title,
+                onValueChange = onTitleChange,
+                isFocused = isTitleFocused,
+                onFocusChanged = onTitleFocusChanged,
+                modifier = Modifier.weight(1f)
+            )
+        }
         IconButton(onClick = onExpandTask) {
             if (taskExpanded)
                 Icon(

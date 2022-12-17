@@ -93,7 +93,7 @@ class HomeViewModel @Inject constructor(
                 val tasks = mutableMapOf<String, List<TaskState>>()
                 todos.forEach { todo ->
                     val tasksState = todo.tasks.filter { task ->
-                        task.dueDate != 0L
+                        task.dueDate != 0L && !task.isComplete
                     }.map { task ->
                         task.toViewState(todo.title)
                     }
@@ -119,7 +119,7 @@ class HomeViewModel @Inject constructor(
                 val tasks = mutableListOf<TaskState>()
                 todos.forEach { todo ->
                     val tasksState = todo.tasks.filter { task ->
-                        task.dueDate != 0L && DateUtils.isToday(task.dueDate)
+                        task.dueDate != 0L && DateUtils.isToday(task.dueDate) && !task.isComplete
                     }.map { task ->
                         task.toViewState(todo.title)
                     }
